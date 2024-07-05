@@ -14,6 +14,10 @@ interface ProductDetailsProps {
     product: any;
 }
 
+interface Product {
+    product: any;
+}
+
 export type CartProductType = {
     id: string,
     name: string,
@@ -34,7 +38,10 @@ export type SelectedImgType = {
 const Horizontal = () => {
     return <hr className="w-[30%] my-2"/>
 }
-const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
+const ProductDetails:React.FC<Product> = ({product}) => {
+
+    // Checking
+    console.log(product);
     
     const {handleAddProductToCart , cartProducts} = useCart()
 

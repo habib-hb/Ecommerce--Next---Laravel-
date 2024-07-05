@@ -1,33 +1,124 @@
 
 import Container from "./components/Container";
 import HomeBanner from "./components/HomeBanner";
-import {products} from "../utils/products";
+// import {products} from "../utils/products";
 import { truncateText } from "@/utils/truncateText";
 import ProductCard from "./components/products/ProductCard";
 import { useEffect } from "react";
 
 export default async function Home() {
 
-  // Value is inside the try block
-  let theRealData
+  // ************ The Whole Products Array Part ************
 
-  // Doing another method
-  try{
-      let someApiData = await fetch('http://127.0.0.1:8000/api/products');
+    // Extracting Array value from the laravel backend data
+    let products: any = [] // This and the variable below are same
 
-      if(!someApiData.ok){
+    let theEntireAllProductArray: any = []
+
+    let UniqueProductsId: any = []
+
+    let productCategories: any = []
+
+    let productColors: any = []
+
+    let productReviews: any = []
+
+    // Doing another method
+    try{
+        let someApiData = await fetch('http://127.0.0.1:8000/api/products');
+
+        if(!someApiData.ok){
         throw new Error('something went wrong regarding the network request.');
-      }
+        }
 
-      let someJsonData = await someApiData.json();
+        let someJsonData: any = await someApiData.json();
 
-      theRealData = someJsonData[0].name;
+        someJsonData.forEach((element : any) => {
+            UniqueProductsId.push(element.product_id);
+        });
 
-  } catch(e){
+        UniqueProductsId = new Set(UniqueProductsId);
+
+        console.log(UniqueProductsId);
+
+        UniqueProductsId.forEach((unique_product_id: any) => {
+            // The Single Product Object Initialization
+            let theSingleProductObject: any = {};
+
+            let loopedProductCategory: any = [];
+
+            let theImagesArrayOfObjects: any = [];
+
+            let theReviewsArrayOfObjects: any = [];
+
+            let theSingleProductSpecificObjects: any =someJsonData.filter((item: any) => item.product_id == unique_product_id);
+
+            theSingleProductSpecificObjects.forEach((single_object: any) => {
+                // Product Category Mapping
+                loopedProductCategory.push(single_object.category);
+
+                // Product color and Image Mapping
+                theImagesArrayOfObjects.push({
+                    'image' : single_object.image,
+                    'color' : single_object.color_name,
+                    'colorCode' : single_object.color_code
+                })
+
+                // Product review Mapping
+                single_object.reviewer_name && theReviewsArrayOfObjects.push({
+                    'reviewerName' : single_object.reviewer_name,
+                    'review' : single_object.review
+                });
+            });
+
+
+
+            // Setting Values to the Single Product Object
+            theSingleProductObject['id'] = unique_product_id;
+
+            theSingleProductObject['category'] = loopedProductCategory[0]; // Later You can customize this
+
+            let unique_images_objects: any = new Set(theImagesArrayOfObjects);
+
+            theSingleProductObject['images'] = [...unique_images_objects]; 
+
+            let unique_reviews_objects: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects) : [];
+
+            theSingleProductObject['reviews'] = [...unique_reviews_objects];
+
+            theSingleProductObject['name'] = theSingleProductSpecificObjects[0].name; 
+
+            theSingleProductObject['description'] = theSingleProductSpecificObjects[0].description;
+
+            theSingleProductObject['price'] = theSingleProductSpecificObjects[0].price;
+
+            theSingleProductObject['brand'] = theSingleProductSpecificObjects[0].brand;
+
+            theSingleProductObject['inStock'] = theSingleProductSpecificObjects[0].stock_amount > 0 ? true : false;
+
+
+
+            // Pushing the Single Product Object to the Array
+            theEntireAllProductArray.push(theSingleProductObject);
+
+        });
+
+
+
+        console.log(theEntireAllProductArray);
+
+        // Setting the products Array for later pass down as card data
+        products = theEntireAllProductArray;
+
+
+
+    } catch(e){
     console.error('Catch Error :' , e);
-  }
+    }
 
-   
+    // ========== The Whole Products Array Part End ==========
+
+    
 
   return (
      <div className="p-8">
@@ -35,13 +126,11 @@ export default async function Home() {
         <div>
           <HomeBanner/>
         </div>
-
-        <div>{theRealData}</div>
         
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
           {products.map((product:any)=>{
-              return <ProductCard data={product}/>
+              return <ProductCard data={product} key={Math.random()}/>
           })}
         </div>
       </Container>

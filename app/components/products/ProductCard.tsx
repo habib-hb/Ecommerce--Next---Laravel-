@@ -15,6 +15,9 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
         return acc + item.rating
     } , 0) / data.reviews.length;
 
+    // Placeholder value
+    // const productRating= 775;
+
     const router = useRouter();
 
     return (

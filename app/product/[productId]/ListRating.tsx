@@ -14,16 +14,16 @@ const ListRating:React.FC<ListRatingProps> = ({product}) => {
             <Heading title="Product Review"/>
             <div className="text-sm mt-2">
                 {product.reviews && product.reviews.map((review:any)=>{
-                    return <div key={review.id} className="max-w-[300px]">
+                    return <div key={Math.random()} className="max-w-[300px]">
                         <div className="flex items-center gap-2">
-                           <Avatar src={review?.user.image}/> 
-                            <div className="font-semibold">{review?.user.name}</div>
-                            <div className="font-light">{moment(review.createdDate).fromNow()}</div>
+                           <Avatar src={product.image}/> 
+                            <div className="font-semibold">{review.reviewer_name}</div>
+                            <div className="font-light">{new Date().toLocaleString()}</div>
                         </div>
                         <div className="mt-2">
-                        <Rating value={review.rating} readOnly />
+                        <Rating value={Math.floor(Math.random() * 6)} size="small" precision={0.5} readOnly />
                         <div className="ml-2">{
-                            review.comment
+                            review.review
                         }</div>
                         <hr className="mt-4 mb-4" />
                         </div>

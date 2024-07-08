@@ -16,8 +16,8 @@ const ListRating:React.FC<ListRatingProps> = ({product}) => {
                 {product.reviews && product.reviews.map((review:any)=>{
                     return <div key={Math.random()} className="max-w-[300px]">
                         <div className="flex items-center gap-2">
-                           <Avatar src={product.image}/> 
-                            <div className="font-semibold">{review.reviewer_name}</div>
+                           <Avatar src={review.reviewerAvatar}/> 
+                            <div className="font-semibold">{review.reviewerName}</div>
                             <div className="font-light">{new Date().toLocaleString()}</div>
                         </div>
                         <div className="mt-2">

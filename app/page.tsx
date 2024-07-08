@@ -67,7 +67,8 @@ export default async function Home() {
                 // Product review Mapping
                 single_object.reviewer_name && theReviewsArrayOfObjects.push({
                     'reviewerName' : single_object.reviewer_name,
-                    'review' : single_object.review
+                    'review' : single_object.review,
+                    'reviewerAvatar' : single_object.reviewer_avatar
                 });
             });
 
@@ -78,13 +79,29 @@ export default async function Home() {
 
             theSingleProductObject['category'] = loopedProductCategory[0]; // Later You can customize this
 
-            let unique_images_objects: any = new Set(theImagesArrayOfObjects);
+            // let unique_images_objects: any = new Set(theImagesArrayOfObjects);
 
-            theSingleProductObject['images'] = [...unique_images_objects]; 
+            // theSingleProductObject['images'] = [...unique_images_objects]; 
 
-            let unique_reviews_objects: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects) : [];
+            let unique_images_objects_in_string_set_objects_format: any = new Set(theImagesArrayOfObjects.map((item:any) => JSON.stringify(item)));
 
-            theSingleProductObject['reviews'] = [...unique_reviews_objects];
+            let unique_images_objects_in_string_array_format = [...unique_images_objects_in_string_set_objects_format]
+
+            let unique_images_objects_in_actual_array_format = unique_images_objects_in_string_array_format.map(item => JSON.parse(item));
+
+            theSingleProductObject['images'] = [...unique_images_objects_in_actual_array_format];
+
+            // let unique_reviews_objects: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects) : [];
+
+            // theSingleProductObject['reviews'] = [...unique_reviews_objects];
+
+            let unique_reviews_objects_in_string_set_objects_format: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects.map((item:any) => JSON.stringify(item))) : [];
+
+            let unique_reviews_objects_in_string_array_format = [...unique_reviews_objects_in_string_set_objects_format];
+
+            let unique_reviews_objects_in_actual_array_format = unique_reviews_objects_in_string_array_format.map(item => JSON.parse(item));
+
+            theSingleProductObject['reviews'] = [...unique_reviews_objects_in_actual_array_format];
 
             theSingleProductObject['name'] = theSingleProductSpecificObjects[0].name; 
 

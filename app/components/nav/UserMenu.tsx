@@ -72,6 +72,11 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
                     <Link href="/admin">
                     <MenuItem onClick={toggleOpen}>Admin Dashboard</MenuItem>
                     </Link>
+                    
+                    {/* Input into product database option */}
+                    <Link href="/dashboard/product-upload">
+                    <MenuItem onClick={toggleOpen}>Insert Product</MenuItem>
+                    </Link>
                     <hr/>
                     <MenuItem onClick={()=>{
                         toggleOpen();

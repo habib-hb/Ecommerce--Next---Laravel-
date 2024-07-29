@@ -62,7 +62,7 @@ export default async function Home() {
                     'image' : single_object.image,
                     'color' : single_object.color_name,
                     'colorCode' : single_object.color_code
-                })
+                });
 
                 // Product review Mapping
                 single_object.reviewer_name && theReviewsArrayOfObjects.push({

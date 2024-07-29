@@ -54,7 +54,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({clientSecret, handleSetPayme
         })
     }
 
-    return  <form onSubmit={handleSubmit} id="payment-form">
+    return(  <form onSubmit={handleSubmit} id="payment-form">
         <div className="mb-6">
             <Heading title="Enter your details to complete checkout"/>
         </div>
@@ -75,7 +75,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({clientSecret, handleSetPayme
             disabled= {isLoading || !stripe || !elements}
             onClick={()=>{}}
         />
-    </form> 
+    </form> )
 }
 
 export default CheckoutForm;

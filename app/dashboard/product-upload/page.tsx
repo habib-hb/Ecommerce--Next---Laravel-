@@ -91,33 +91,32 @@ const ProductUpload = () => {
 
                     <div className="space-y-2">
                     <Label htmlFor="name">Product Name</Label>
-                    <Input name="product_name" id="name" placeholder="Enter the product name" className="w-full" onChange={handleChange} />
+                    <Input name="product_name" id="name" placeholder="" className="w-full" onChange={handleChange} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="email">Description</Label>
-                    <Textarea name="description" id="email" placeholder="Enter the product description" className="w-full" onChange={handleChange} />
+                    <Textarea name="description" id="email" placeholder="" className="w-full" onChange={handleChange} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="phone">Brand</Label>
-                    <Input name="brand" id="phone" placeholder="Enter the product brand" className="w-full" onChange={handleChange} />
+                    <Input name="brand" id="phone" placeholder="" className="w-full" onChange={handleChange} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="price">Product Price</Label>
-                    <Input name="price" id="price" placeholder="Enter the product price" type="number" className="w-full" onChange={handleChange} />
+                    <Input name="price" id="price" placeholder="" type="number" className="w-full" onChange={handleChange} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="message">Instock Amount</Label>
-                    <Input name="instock_amount" id="message" placeholder="Enter the product instock amount" type="number" className="w-full" onChange={handleChange} />
+                    <Input name="instock_amount" id="message" placeholder="" type="number" className="w-full" onChange={handleChange} />
                     </div>
 
                     <div className="space-y-2">
-                    <Label htmlFor="category">Categories</Label>
-                    <h6 className="text-sm font-light">Seperate the categories by comma "," e.g("red,green,blue")</h6>
-                    <Input name="category" id="category" placeholder="Enter the categories" className="w-full" onChange={handleChange} />
+                    <Label htmlFor="category">Category</Label>
+                    <Input name="category" id="category" placeholder="" className="w-full" onChange={handleChange} />
                     </div>
 
                     <div className="space-y-2">

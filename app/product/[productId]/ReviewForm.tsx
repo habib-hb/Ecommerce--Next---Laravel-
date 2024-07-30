@@ -17,10 +17,17 @@ interface ReviewFormProps {
     currentUser: any;
 }
 
+  
+
+const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
+
+    //Using React Context to update 'ListRating' component as well
+    const { currentReviews, setCurrentReviews } = useContext(ReviewsContext);
 
 
-// Form Submit functionality
-const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+    // Form Submit functionality
+    const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     let formData = new FormData(e.currentTarget);
@@ -39,6 +46,7 @@ const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       review_text: reviewTextData,
       selected_stars: selectedStarsData?.slice(0, 1),
       review_image: reviewImageFile
+
     };
   
     console.log('formData: ', formDataObject);
@@ -66,8 +74,8 @@ const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
         alert(`Form submitted successfully :)`);
 
-        // Refreshing the page 
-        window.location.reload();     
+        // Filling the context data for the ListRating component
+        setCurrentReviews( JSON.stringify(data) + currentReviews );    
         
         })
     .catch((error) =>{
@@ -80,19 +88,8 @@ const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         }
 
   };
-  
 
-const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
 
-    //Using React Context to update 'ListRating' component as well
-    const { currentReviews, setCurrentReviews } = useContext(ReviewsContext);
-
-    // Testing Context Function
-    let testingContext = ()=>{
-        setCurrentReviews([1]);
-    }
-
-            // let currentUser = getCurrentUser();
 
     const ParsedcurrentUser = JSON.parse(currentUser.value);
 
@@ -174,12 +171,7 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
 
                         </Card>
 
-                            {/* Testing */}
-
-                            <button onClick={testingContext}>Testing</button>
-
-                            {/* End Testing */}
-
+                         
         </div>
      );
 }

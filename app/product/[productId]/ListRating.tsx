@@ -4,12 +4,16 @@ import Avatar from "@/app/components/Avatar";
 import Heading from "@/app/components/Heading";
 import { Rating } from "@mui/material";
 import moment from "moment";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { ReviewsContext } from './ReviewsContext';
 
 interface ListRatingProps {
     product:any;
 }
 const ListRating:React.FC<ListRatingProps> = ({product}) => {
+
+        // Testing Use Context
+        const { currentReviews, setCurrentReviews } = useContext(ReviewsContext);
 
         useEffect(() => {
             console.log('Review Section >>>'  , product)
@@ -37,6 +41,7 @@ const ListRating:React.FC<ListRatingProps> = ({product}) => {
                     </div>
                 })}
             </div>
+            <p>{currentReviews ? currentReviews[0] : 'not-clicked'}</p>
         </div>
      );
 }

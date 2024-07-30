@@ -5,11 +5,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { WidthIcon } from "@radix-ui/react-icons";
 // import { getCurrentUser } from "@/actions/getCurrentUser";
 // import { useSession } from 'next-auth/react';
+import { ReviewsContext } from './ReviewsContext';
 
 interface ReviewFormProps {
     product:any;
@@ -62,8 +63,13 @@ const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data)
+
         alert(`Form submitted successfully :)`);
-    })
+
+        // Refreshing the page 
+        window.location.reload();     
+        
+        })
     .catch((error) =>{
         console.error('Error:', error)
         alert('Oh Noo!! Form submission error :(');
@@ -76,9 +82,17 @@ const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   };
   
 
-const ReviewForm:React.FC<ReviewFormProps>  = ({product, currentUser}) => {
+const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
 
-    // let currentUser = getCurrentUser();
+    //Using React Context to update 'ListRating' component as well
+    const { currentReviews, setCurrentReviews } = useContext(ReviewsContext);
+
+    // Testing Context Function
+    let testingContext = ()=>{
+        setCurrentReviews([1]);
+    }
+
+            // let currentUser = getCurrentUser();
 
     const ParsedcurrentUser = JSON.parse(currentUser.value);
 
@@ -159,6 +173,12 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product, currentUser}) => {
                         </CardContent>
 
                         </Card>
+
+                            {/* Testing */}
+
+                            <button onClick={testingContext}>Testing</button>
+
+                            {/* End Testing */}
 
         </div>
      );

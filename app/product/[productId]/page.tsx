@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/actions/getCurrentUser";
 // import { products } from "@/utils/products";
 import { useSession } from 'next-auth/react';
 import { useEffect } from "react";
+import { ReviewsProvider } from "./ReviewsContext";
 
 interface IPrams {
     productId:string
@@ -154,15 +155,21 @@ const Product = async ({params}:{params:IPrams}) => {
     let currentUser = getCurrentUser();
 
 
-
     return ( 
         <div className="p-8">
             <Container>
                 <ProductDetails product={product}/>  
                 <div className="flex flex-col mt-20 gap-4">
                     <div>Add Rating</div>
-                    <ReviewForm product={product} currentUser={currentUser}/>
-                    <ListRating product={product}/>
+
+                    <ReviewsProvider>
+
+                        <ReviewForm product={product} currentUser={currentUser}/>
+                        
+                        <ListRating product={product}/>
+
+                    </ReviewsProvider>
+
                 </div>
             </Container>
         </div>

@@ -5,6 +5,7 @@ import ReviewForm from "./ReviewForm";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 // import { products } from "@/utils/products";
 import { useSession } from 'next-auth/react';
+import { useEffect } from "react";
 
 interface IPrams {
     productId:string
@@ -12,8 +13,6 @@ interface IPrams {
 
 const Product = async ({params}:{params:IPrams}) => {
     console.log("params" , params)
-
-
 
    // ************ The Whole Products Array Part ************
 
@@ -61,6 +60,7 @@ const Product = async ({params}:{params:IPrams}) => {
             let theSingleProductSpecificObjects: any =someJsonData.filter((item: any) => item.product_id == unique_product_id);
 
             theSingleProductSpecificObjects.forEach((single_object: any) => {
+
                 // Product Category Mapping
                 loopedProductCategory.push(single_object.category);
 
@@ -72,10 +72,12 @@ const Product = async ({params}:{params:IPrams}) => {
                 })
 
                 // Product review Mapping
-                single_object.reviewer_name && theReviewsArrayOfObjects.push({
-                    'reviewerName' : single_object.reviewer_name,
+                single_object.customer_name && theReviewsArrayOfObjects.push({
+                            // 'reviewerName' : single_object.reviewer_name,
+                    'reviewerName' : single_object.customer_name,
                     'review' : single_object.review,
-                    'reviewerAvatar' : single_object.reviewer_avatar
+                    'reviewerAvatar' : single_object.customer_avatar,
+                    'rating': single_object.rating
                 });
             });
 
@@ -86,9 +88,9 @@ const Product = async ({params}:{params:IPrams}) => {
 
             theSingleProductObject['category'] = loopedProductCategory[0]; // Later You can customize this
 
-           // let unique_images_objects: any = new Set(theImagesArrayOfObjects);
+                    // let unique_images_objects: any = new Set(theImagesArrayOfObjects);
 
-            // theSingleProductObject['images'] = [...unique_images_objects]; 
+                    // theSingleProductObject['images'] = [...unique_images_objects]; 
 
             let unique_images_objects_in_string_set_objects_format: any = new Set(theImagesArrayOfObjects.map((item:any) => JSON.stringify(item)));
 
@@ -98,9 +100,9 @@ const Product = async ({params}:{params:IPrams}) => {
 
             theSingleProductObject['images'] = [...unique_images_objects_in_actual_array_format];
 
-            // let unique_reviews_objects: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects) : [];
+                    // let unique_reviews_objects: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects) : [];
 
-            // theSingleProductObject['reviews'] = [...unique_reviews_objects];
+                    // theSingleProductObject['reviews'] = [...unique_reviews_objects];
 
             let unique_reviews_objects_in_string_set_objects_format: any = theReviewsArrayOfObjects ? new Set(theReviewsArrayOfObjects.map((item:any) => JSON.stringify(item))) : [];
 
@@ -150,6 +152,8 @@ const Product = async ({params}:{params:IPrams}) => {
     console.log(product)
 
     let currentUser = getCurrentUser();
+
+
 
     return ( 
         <div className="p-8">

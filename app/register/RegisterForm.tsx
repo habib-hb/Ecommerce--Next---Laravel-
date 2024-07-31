@@ -76,9 +76,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({currentUser}) => {
 
         <Button
         outline
-        label="Continue with Google"
+        label="Continue with Github"
         icon={AiOutlineGoogle} 
-        onClick={()=>{signIn('google')}}
+        onClick={()=>{signIn('github')}}
         />
 
         <hr className="bg-slate-300 w-full h-px" />

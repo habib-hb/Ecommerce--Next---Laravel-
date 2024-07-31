@@ -172,6 +172,8 @@ const Product = async ({params}:{params:IPrams}) => {
 
                 </div>
             </Container>
+
+
         </div>
      );
 }

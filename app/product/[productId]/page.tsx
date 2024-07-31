@@ -174,6 +174,12 @@ const Product = async ({params}:{params:IPrams}) => {
             </Container>
 
 
+        {/* Testing The Procedure */}
+            <form method="GET" action="http://127.0.0.1:8000/auth/redirect">
+                <input type="submit" value='Github'/>
+            </form>
+
+
         </div>
      );
 }

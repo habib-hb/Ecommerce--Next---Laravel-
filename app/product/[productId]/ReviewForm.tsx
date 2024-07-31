@@ -117,7 +117,8 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
 
                         <CardContent>
 
-                            <form onSubmit={formSubmit} className="grid gap-6">
+                            
+                            { ParsedcurrentUser?.id ? <form onSubmit={formSubmit} className="grid gap-6">
 
                                 {/* Hidden Input fields */}
                                 <input type="hidden" name="product_id" value={product.id} />
@@ -166,7 +167,7 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
 
                                     </CardFooter>
 
-                            </form>
+                            </form> : <h2><a href='/register' className='text-blue-600 underline'>Sign Up</a> to leave a review</h2> }
                         </CardContent>
 
                         </Card>

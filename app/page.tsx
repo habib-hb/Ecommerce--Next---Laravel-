@@ -65,12 +65,14 @@ export default async function Home() {
                 });
 
                 // Product review Mapping
-                single_object.reviewer_name && theReviewsArrayOfObjects.push({
-                    'reviewerName' : single_object.reviewer_name,
-                    'review' : single_object.review,
-                    'reviewerAvatar' : single_object.reviewer_avatar
-                });
-            });
+                single_object.customer_name && theReviewsArrayOfObjects.push({
+                      // 'reviewerName' : single_object.reviewer_name,
+                      'reviewerName' : single_object.customer_name,
+                      'review' : single_object.review,
+                      'reviewerAvatar' : single_object.customer_avatar,
+                      'rating': single_object.rating
+                       });
+                 });
 
 
 
@@ -134,6 +136,9 @@ export default async function Home() {
     }
 
     // ========== The Whole Products Array Part End ==========
+
+
+    console.log('Product REview Check >>>' , products[2]);
 
     
 

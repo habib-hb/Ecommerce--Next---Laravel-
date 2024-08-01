@@ -39,32 +39,57 @@ const RegisterForm: React.FC<RegisterFormProps> = ({currentUser}) => {
         }
     }, [])
 
+    // const onSubmit:SubmitHandler<FieldValues> = (data)=>{
+    //     setIsLoading(true)
+       
+    //     axios.post('/api/register' , data).then(()=>{
+    //         toast.success('Account created')
+
+    //     signIn("credentials" , {
+    //         email: data.email,
+    //         password: data.password,
+    //         redirect: false,
+    //     }).then((callback)=>{
+    //         if(callback?.ok){
+    //             router.push("/cart");
+    //             router.refresh();
+    //             toast.success('Logged In')
+    //         }
+
+    //         if(callback?.error){
+    //             toast.error(callback.error)
+    //         }
+
+    //     });
+    //     }).catch(()=>toast.error("Something went wrong")).finally(()=>{
+    //         setIsLoading(false)
+    //     });
+    // };
+
+
+
     const onSubmit:SubmitHandler<FieldValues> = (data)=>{
         setIsLoading(true)
        
-        axios.post('/api/register' , data).then(()=>{
-            toast.success('Account created')
+        axios.post('http://127.0.0.1:8000/auth/user/create' , data, {
+            withCredentials: true
+        }).then(()=>{
 
-        signIn("credentials" , {
-            email: data.email,
-            password: data.password,
-            redirect: false,
-        }).then((callback)=>{
-            if(callback?.ok){
-                router.push("/cart");
-                router.refresh();
-                toast.success('Logged In')
-            }
+            toast.success('Account created');
 
-            if(callback?.error){
-                toast.error(callback.error)
-            }
+            localStorage.setItem('loggedInEmail' , data.email);
 
-        });
-        }).catch(()=>toast.error("Something went wrong")).finally(()=>{
+            window.location.href='/';
+
+        }).catch(()=>toast.error("Something went wrong"))
+        .finally(()=>{
+
             setIsLoading(false)
+
         });
     };
+
+
 
     if(currentUser){
         return <p className="text-center">Logged In. Redirecting...</p>

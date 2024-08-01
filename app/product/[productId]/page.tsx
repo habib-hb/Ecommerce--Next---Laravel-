@@ -152,7 +152,8 @@ const Product = async ({params}:{params:IPrams}) => {
     // testing
     console.log(product)
 
-    let currentUser = getCurrentUser();
+    // let currentUser = getCurrentUser();
+
 
 
     return ( 
@@ -164,7 +165,7 @@ const Product = async ({params}:{params:IPrams}) => {
 
                     <ReviewsProvider>
 
-                        <ReviewForm product={product} currentUser={currentUser}/>
+                        <ReviewForm product={product}/>
                         
                         <ListRating product={product}/>
 

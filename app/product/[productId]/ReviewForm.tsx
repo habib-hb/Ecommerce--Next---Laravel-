@@ -5,25 +5,29 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { WidthIcon } from "@radix-ui/react-icons";
 // import { getCurrentUser } from "@/actions/getCurrentUser";
 // import { useSession } from 'next-auth/react';
 import { ReviewsContext } from './ReviewsContext';
+import axios from "axios";
 
 interface ReviewFormProps {
     product:any;
-    currentUser: any;
 }
+
 
   
 
-const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
+const ReviewForm:React.FC<ReviewFormProps>  = ({product }) => {
 
     //Using React Context to update 'ListRating' component as well
     const { currentReviews, setCurrentReviews } = useContext(ReviewsContext);
 
+    // Reload after the user data retrieved
+    let [dataRetrived, setDataRetrived] = useState({user_id: '', user_name: ''});
+  
 
 
     // Form Submit functionality
@@ -90,8 +94,36 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
   };
 
 
+    // Retriving The current user from the laravel database
+            // const ParsedcurrentUser = JSON.parse(currentUser.value);
+    let currentUserEmail = localStorage.getItem('loggedInEmail');        
+    let ParsedcurrentUser : any;
+            async function loadUser(){
+                const theRequest = await axios.post('http://127.0.0.1:8000/api/user_data_retrive' , {
+                    email: currentUserEmail
+                })
 
-    const ParsedcurrentUser = JSON.parse(currentUser.value);
+
+            ParsedcurrentUser = theRequest.data.data;
+
+            console.log('ParsedUser >>>' , ParsedcurrentUser);
+
+                    // let userNameElement =  document.getElementById('user_name')
+                    // let userIdElement =  document.getElementById('user_id')
+
+                    // userNameElement ? userNameElement.innerText = ParsedcurrentUser.name : '';
+                    // userIdElement ? userIdElement.innerText = ParsedcurrentUser.id : '';
+            !dataRetrived.user_id ? setDataRetrived({
+                user_id: ParsedcurrentUser?.id,
+                user_name: ParsedcurrentUser?.name
+            }) : '';     
+
+
+            }
+
+            //Executing the function
+            loadUser();
+
 
     useEffect(() => {
         console.log( 'Product:  '  , product);
@@ -117,15 +149,19 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product , currentUser}) => {
 
                         <CardContent>
 
+
+                                    {/* <p id='user_id'>{dataRetrived?.user_id ? dataRetrived?.user_id : ''}</p>
+                                    <p id='user_name'>{dataRetrived?.user_name ? dataRetrived?.user_name : ''}</p> */}
+
                             
-                            { ParsedcurrentUser?.id ? <form onSubmit={formSubmit} className="grid gap-6">
+                            { dataRetrived?.user_id ? <form onSubmit={formSubmit} className="grid gap-6">
 
                                 {/* Hidden Input fields */}
                                 <input type="hidden" name="product_id" value={product.id} />
 
-                                <input type="hidden" name="user_id" value={ParsedcurrentUser?.id} />
+                                <input type="hidden" name="user_id" value={dataRetrived?.user_id} />
 
-                                <input type="hidden" name="user_name" value={ParsedcurrentUser?.name} />
+                                <input type="hidden" name="user_name" value={dataRetrived?.user_name} />
 
 
                                     <div className="grid gap-2">

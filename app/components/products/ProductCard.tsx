@@ -60,6 +60,12 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
             <div>{data.reviews.length} reviews</div>
             <div className="font-semibold">{formatPrice(data.price)}</div>
         </div>
+        
+        {/* Testing */}
+        <p>{localStorage.getItem('loggedInEmail') ? 'Email Is' : 'No Email'}</p>
+
+
+
     </div> );
 }
  

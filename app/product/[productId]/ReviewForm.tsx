@@ -27,6 +27,9 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product }) => {
 
     // Reload after the user data retrieved
     let [dataRetrived, setDataRetrived] = useState({user_id: '', user_name: ''});
+
+    // Form Load Condition
+    let [formShouldLoad, setFormShouldLoad] = useState(true);
   
 
 
@@ -94,11 +97,15 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product }) => {
   };
 
 
-    // Retriving The current user from the laravel database
+    // *** Retriving The current user from the laravel database
             // const ParsedcurrentUser = JSON.parse(currentUser.value);
     let currentUserEmail = localStorage.getItem('loggedInEmail');        
     let ParsedcurrentUser : any;
+
+            
             async function loadUser(){
+                if(currentUserEmail){
+
                 const theRequest = await axios.post('http://127.0.0.1:8000/api/user_data_retrive' , {
                     email: currentUserEmail
                 })
@@ -107,22 +114,32 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product }) => {
             ParsedcurrentUser = theRequest.data.data;
 
             console.log('ParsedUser >>>' , ParsedcurrentUser);
+            }
 
                     // let userNameElement =  document.getElementById('user_name')
                     // let userIdElement =  document.getElementById('user_id')
 
                     // userNameElement ? userNameElement.innerText = ParsedcurrentUser.name : '';
                     // userIdElement ? userIdElement.innerText = ParsedcurrentUser.id : '';
+
+            if(ParsedcurrentUser){    
+
             !dataRetrived.user_id ? setDataRetrived({
                 user_id: ParsedcurrentUser?.id,
                 user_name: ParsedcurrentUser?.name
-            }) : '';     
-
+            }) : '';   
+            
+            setFormShouldLoad(true);
+        }else{
+            formShouldLoad ? setFormShouldLoad(false) : '';
+        }
 
             }
 
-            //Executing the function
-            loadUser();
+        //Executing the function
+        loadUser();
+
+    // *** End Retriving The current user from the laravel database    
 
 
     useEffect(() => {
@@ -154,7 +171,7 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product }) => {
                                     <p id='user_name'>{dataRetrived?.user_name ? dataRetrived?.user_name : ''}</p> */}
 
                             
-                            { dataRetrived?.user_id ? <form onSubmit={formSubmit} className="grid gap-6">
+                            { formShouldLoad ? <form onSubmit={formSubmit} className="grid gap-6">
 
                                 {/* Hidden Input fields */}
                                 <input type="hidden" name="product_id" value={product.id} />

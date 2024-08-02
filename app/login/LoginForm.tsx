@@ -71,7 +71,7 @@ const LoginForm: React.FC<LoginFormProps> = ({currentUser}) => {
         outline
         label="Continue with Google"
         icon={AiOutlineGoogle} 
-        onClick={()=>{signIn('github')}}
+        onClick={()=>window.location.href='http://127.0.0.1:8000/auth/redirect'}
         />
 
         <hr className="bg-slate-300 w-full h-px" />

@@ -103,7 +103,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({currentUser}) => {
         outline
         label="Continue with Github"
         icon={AiOutlineGoogle} 
-        onClick={()=>{signIn('github')}}
+        onClick={()=>window.location.href='http://127.0.0.1:8000/auth/redirect'}
         />
 
         <hr className="bg-slate-300 w-full h-px" />

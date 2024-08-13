@@ -81,7 +81,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({currentUser}) => {
 
             window.location.href='/';
 
-        }).catch(()=>toast.error("Something went wrong"))
+        }).catch((e)=>{
+
+           e.response.data.message ? toast.error(e.response.data.message) : toast.error('Something went wrong');
+
+        })
         .finally(()=>{
 
             setIsLoading(false)

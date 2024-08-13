@@ -21,8 +21,8 @@ interface UserMenuProps{
 
 const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
 
-    // Testing
-
+  
+    // Retriving The user Data from backend database
     const [user , setUser] = useState<any>(null);
 
     const userAcc = localStorage.getItem('loggedInEmail');
@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
             // userNameElement ? userNameElement.innerHTML = response.data.data.name : null;
 
             setUser(response.data.data);
-            
+
             setUser((prev:any)=>({...prev, avatar : response.data.avatar}));
 
         }).catch((error) => {
@@ -58,15 +58,26 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
              }
 
         }, []);
+        
     
 
-    // End Testing
+    // End Retriving
+
+
 
     const [isOpen , setIsOpen] = useState(false);
 
     const toggleOpen = useCallback(()=>{
         setIsOpen((prev) => !prev)
     }, [])
+
+
+
+    // Logout Functionality
+    function logoutProcess(){
+        localStorage.removeItem('loggedInEmail');
+        window.location.href = '/';
+    }
 
     return (
     <>
@@ -110,12 +121,12 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
                 {user ?                ( <div>
                     <p id='user-name' className='p-4'>{user.name}</p><hr />
 
-                    <Link href="/orders">
+                    <Link href="/cart">
                     <MenuItem onClick={toggleOpen}>Your Orders</MenuItem>
                     </Link>
 
-                    <Link href="/admin">
-                    <MenuItem onClick={toggleOpen}>Admin Dashboard</MenuItem>
+                    <Link href="/profile">
+                    <MenuItem onClick={toggleOpen}>Your Profile</MenuItem>
                     </Link>
                     
                     {/* Input into product database option */}
@@ -126,6 +137,9 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
                     <MenuItem onClick={()=>{
                         toggleOpen();
                         signOut();
+
+                        // Logout Procedure
+                        logoutProcess();
                         }}>Logout</MenuItem>
                
                 </div>) :  ( <div>

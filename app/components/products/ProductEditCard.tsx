@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 interface ProductCardProps {
     data:any
 }
-const ProductCard:React.FC<ProductCardProps> = ({data}) => {
+const ProductEditCard:React.FC<ProductCardProps> = ({data}) => {
 
     const productRating= data.reviews.reduce((acc:number, item:any)=>{
         return acc + item.rating
@@ -22,7 +22,7 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
 
     return (
     <div 
-    onClick={()=> router.push(`/product_edit/${data.id}`)}
+    onClick={()=> router.push(`/product/${data.id}`)}
     className="
      col-span-1
      cursor-pointer
@@ -69,4 +69,4 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
     </div> );
 }
  
-export default ProductCard;
+export default ProductEditCard;

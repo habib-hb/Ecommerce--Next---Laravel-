@@ -131,8 +131,8 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
                     </Link>
                     
                     {/* Input into product database option */}
-                    <Link href="/dashboard/product-upload">
-                    <MenuItem onClick={toggleOpen}>Insert Product</MenuItem>
+                    <Link href="/dashboard">
+                    <MenuItem onClick={toggleOpen}>Admin Dashboard</MenuItem>
                     </Link>
                     <hr/>
                     <MenuItem onClick={()=>{

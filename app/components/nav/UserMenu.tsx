@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback , useState } from "react";
+import { useCallback , useEffect, useState } from "react";
 
 import Avatar from "../Avatar";
 
@@ -11,6 +11,7 @@ import { signOut } from "next-auth/react";
 import BackDrop from "./BackDrop";
 import { User } from "@prisma/client";
 import { SafeUser } from "@/types";
+import axios from "axios";
 
 
 interface UserMenuProps{
@@ -19,6 +20,47 @@ interface UserMenuProps{
 
 
 const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
+
+    // Testing
+
+    const [user , setUser] = useState<any>(null);
+
+    const userAcc = localStorage.getItem('loggedInEmail');
+
+    async function userDataExtraction() {
+        await axios.post('http://127.0.0.1:8000/api/user_data_retrive' , {
+            email : userAcc
+        }).then((response) => {
+
+            console.log('User Avatar from retrived data >>>' + response.data.avatar);
+
+            // const userNameElement = document.getElementById('user_name');
+            // userNameElement ? userNameElement.innerHTML = response.data.data.name : null;
+
+            setUser(response.data.data);
+            
+            setUser((prev:any)=>({...prev, avatar : response.data.avatar}));
+
+        }).catch((error) => {
+
+            console.error('Something went wrong in the user data extraction >>>' + error);
+
+        });
+    }
+
+    
+        useEffect(() => {
+
+            if(userAcc && user == null) {
+
+                userDataExtraction();
+
+             }
+
+        }, []);
+    
+
+    // End Testing
 
     const [isOpen , setIsOpen] = useState(false);
 
@@ -45,7 +87,7 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
             text-slate-700
          "
         >
-            <Avatar />
+            {user?.avatar ? <Avatar src={user.avatar} /> : <Avatar />}
             <AiFillCaretDown/>
         </div>
         {isOpen && (
@@ -64,7 +106,10 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
                 cursor-pointer
 
             ">
-                {currentUser ?                ( <div>
+                {/* {currentUser ?                ( <div> */}
+                {user ?                ( <div>
+                    <p id='user-name' className='p-4'>{user.name}</p><hr />
+
                     <Link href="/orders">
                     <MenuItem onClick={toggleOpen}>Your Orders</MenuItem>
                     </Link>

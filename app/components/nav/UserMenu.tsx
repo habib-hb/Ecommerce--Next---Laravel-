@@ -76,6 +76,7 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
     // Logout Functionality
     function logoutProcess(){
         localStorage.removeItem('loggedInEmail');
+        localStorage.removeItem('eShopCartItems');
         window.location.href = '/';
     }
 

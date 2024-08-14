@@ -283,7 +283,7 @@ const Product =  ({params}:{params:IPrams}) => {
 
    if(formData?.loaded){
      return ( 
-       <div className="p-8">
+       <div className="py-8">
             <Container>
 
                 <div className="flex flex-col mt-20 gap-4">
@@ -299,7 +299,7 @@ const Product =  ({params}:{params:IPrams}) => {
 
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-                    <input type="text" name="product_id" value={formData?.product_id} />
+                    <input type="hidden" name="product_id" value={formData?.product_id} />
 
                     <div className="space-y-2">
                     <Label htmlFor="name">Product Name</Label>

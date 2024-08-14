@@ -1,7 +1,7 @@
 import Container from "../components/Container";
-import ProductEditCard from "../components/products/ProductEditCard";
+import ProductDeleteCard from "../components/products/ProductDeleteCard";
 
-const Product_edit = async() => {
+const Product_delete = async() => {
   // ************ The Whole Products Array Part ************
 
     // Extracting Array value from the laravel backend data
@@ -134,6 +134,10 @@ const Product_edit = async() => {
 
     console.log('Product REview Check >>>' , products[2]);
 
+
+
+
+
     
 
   return (
@@ -141,18 +145,19 @@ const Product_edit = async() => {
       <Container>    
 
         <div className="flex flex-col justify-center items-center p-8">
-            <h1 className="text-3xl font-bold">Product Edit Section</h1>
-            <p>Click on the product you want to edit</p>
+            <h1 className="text-3xl font-bold">Product Delete Section</h1>
+            <p>Click on the specific delete button of the product you want to delete</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
           {products.map((product:any)=>{
-              return <ProductEditCard data={product} key={Math.random()}/>
+              return <ProductDeleteCard data={product} key={Math.random()}/>
           })}
         </div>
+
       </Container>
      </div>
   )
 }
  
-export default Product_edit;
+export default Product_delete;

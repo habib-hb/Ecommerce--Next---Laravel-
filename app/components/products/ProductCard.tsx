@@ -22,7 +22,7 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
 
     return (
     <div 
-    onClick={()=> router.push(`/product_edit/${data.id}`)}
+    onClick={()=> router.push(`/product/${data.id}`)}
     className="
      col-span-1
      cursor-pointer
@@ -61,11 +61,6 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
             <div className="font-semibold">{formatPrice(data.price)}</div>
         </div>
         
-        {/* Testing */}
-        <p>{localStorage.getItem('loggedInEmail') ? 'Email Is' : 'No Email'}</p>
-
-
-
     </div> );
 }
  

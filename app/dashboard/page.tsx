@@ -13,7 +13,7 @@ const Dashboard = () => {
 
                 <a href="/product_delete" className="text-2xl bg-slate-600 text-white rounded-lg p-8 m-2 cursor-pointer hover:scale-125 w-[90vw] md:w-[60vw] text-center shadow-xl">Product Delete</a>
 
-                <a href="" className="text-2xl bg-slate-600 text-white rounded-lg p-8 m-2 cursor-pointer hover:scale-125 w-[90vw] md:w-[60vw] text-center shadow-xl">Comments</a>
+                <a href="/comments" className="text-2xl bg-slate-600 text-white rounded-lg p-8 m-2 cursor-pointer hover:scale-125 w-[90vw] md:w-[60vw] text-center shadow-xl">Comments</a>
 
                 <a href="" className="text-2xl bg-slate-600 text-white rounded-lg p-8 m-2 cursor-pointer hover:scale-125 w-[90vw] md:w-[60vw] text-center shadow-xl">Customers</a>
 

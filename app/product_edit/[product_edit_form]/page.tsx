@@ -1,3 +1,6 @@
+'use client'
+
+
 import Container from "@/app/components/Container";
 // import ProductDetails from "./ProductDetails";
 // import ListRating from "./ListRating";
@@ -5,7 +8,7 @@ import Container from "@/app/components/Container";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 // import { products } from "@/utils/products";
 import { useSession } from 'next-auth/react';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // import { ReviewsProvider } from "./ReviewsContext";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -18,8 +21,25 @@ interface IPrams {
     product_edit_form:string
 }
 
-const Product = async ({params}:{params:IPrams}) => {
+// const Product = async ({params}:{params:IPrams}) => {
+const Product =  ({params}:{params:IPrams}) => {
     console.log("params" , params)
+
+    const [product, setProduct] = useState<any>({});
+
+    let [formData, setFormData] = useState<any>({
+      product_id: '',
+      product_name: '',
+      description: '',
+      brand : '',
+      price : '',
+      instock_amount : '',
+      category : '',
+      images: [],
+      loaded: false
+    });
+
+
 
    // ************ The Whole Products Array Part ************
 
@@ -37,6 +57,7 @@ const Product = async ({params}:{params:IPrams}) => {
     let productReviews: any = []
 
     // Doing another method
+    async function productExtractionOperation (){
     try{
         let someApiData = await fetch('http://127.0.0.1:8000/api/products');
 
@@ -145,50 +166,69 @@ const Product = async ({params}:{params:IPrams}) => {
         // Setting the products Array for later pass down as card data
         products = theEntireAllProductArray;
 
+        console.log('Products Array from product edit section >>> ' , products);
+
+        const productData = products.find((item: any)=> item.id == params.product_edit_form) // Not doing strict equality because the api response of the item.id is string
+
+        // Checking
+        console.log('Single Product details from product edit page >>> ' , productData)
+
+
+
+        // Setting -> Product Data to the FormData state 
+        setFormData({
+            ...formData,
+            product_id: productData?.id,
+            product_name: productData?.name,
+            description: productData?.description,
+            brand: productData?.brand,
+            price: productData?.price,
+            instock_amount: productData?.inStock_amount,
+            category: productData?.category,
+            images: productData?.images,
+            loaded: true
+        });
+
 
 
     } catch(e){
     console.error('Catch Error :' , e);
     }
 
+  }
+
+
+  // Calling the whole async function within useEffect
+  useEffect(() => {
+    !formData?.product_name && productExtractionOperation();
+  }, []);
+
     // ========== The Whole Products Array Part End ==========
 
 
     
-    const product = products.find((item: any)=> item.id == params.product_edit_form) // Not doing strict equality because the api response of the item.id is string
+    // const product = products.find((item: any)=> item.id == params.product_edit_form) // Not doing strict equality because the api response of the item.id is string
 
-    // testing
-    console.log(product)
+    // // Checking
+    // console.log('Single Product details from product edit page >>> ' , product)
 
   
 
     // From Functionality*** 
-    let formData = {
-        product_name: '',
-        description: '',
-        brand : '',
-        price : '',
-        instock_amount : '',
-        category : '',
-        images: [],
-      };
-
-
-
       const handleChange = (e: any) => {
          if (e.target.name === 'images[]') {
                 // Convert FileList to array for easier handling
                 const filesArray:any = Array.from(e.target.files);
             
-                formData = {
+                setFormData({
                   ...formData,
                   images: filesArray, // Update images with array of File objects
-                };
+                });
         } else {
-          formData = {
+          setFormData({
             ...formData,
             [e.target.name]: e.target.value,
-          };
+          });
         }
       };
 
@@ -198,6 +238,7 @@ const Product = async ({params}:{params:IPrams}) => {
         e.preventDefault();
     
         const data = new FormData();
+        data.append('product_id', formData.product_id);
         data.append('product_name', formData.product_name);
         data.append('description', formData.description);
         data.append('brand', formData.brand);
@@ -210,30 +251,39 @@ const Product = async ({params}:{params:IPrams}) => {
         }
     
         try {
-          const response = await fetch('http://127.0.0.1:8000/api/dashboard/product-upload', {
+          const response = await fetch('http://127.0.0.1:8000/api/dashboard/product_update', {
             method: 'POST',
             body: data,
           });
     
           if (response.ok) {
+
             // Handle successful form submission
-            alert('Form submitted successfully');
+            const responseData = await response.json(); // Parse the JSON response
+            alert('Form submitted successfully: ' + responseData.message); 
+
+            console.log('submitted form Data >>>' , {...formData});
+
           } else {
+
             // Handle errors
             alert('Form submission error - else block');
+
           }
         } catch (error) {
+
           console.error('Form submission error', error);
           alert(' Form submission error - catch block');
+
         }
       };
 
 
 
 
-
-    return ( 
-        <div className="p-8">
+   if(formData?.loaded){
+     return ( 
+       <div className="p-8">
             <Container>
 
                 <div className="flex flex-col mt-20 gap-4">
@@ -247,43 +297,44 @@ const Product = async ({params}:{params:IPrams}) => {
 
                 <CardContent className="grid gap-4">
 
-                    <form method="POST" action="http://127.0.0.1:8000/api/dashboard/product_edit" encType="multipart/form-data">
+                    <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-                    <input type="hidden" name="product_id" value={product?.id} />
+                    <input type="text" name="product_id" value={formData?.product_id} />
 
                     <div className="space-y-2">
                     <Label htmlFor="name">Product Name</Label>
-                    <Input name="product_name" id="name" placeholder="" className="w-full"  value={product?.name}/>
+                    <input name="product_name" id="name" className="w-full border border-slate-500 p-2 rounded-lg" onChange={handleChange} value={formData?.product_name} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="description">Description</Label>
-                    <Textarea name="description" id="description" placeholder="" className="w-full" value={product?.description} />
+                    <Textarea name="description" id="description" placeholder="" className="w-full" onChange={handleChange}  value={formData?.description} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="brand">Brand</Label>
-                    <Input name="brand" id="brand" placeholder="" className="w-full"  value={product?.brand}/>
+                    <Input name="brand" id="brand" placeholder="" className="w-full" onChange={handleChange}   value={formData?.brand}/>
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="price">Price</Label>
-                    <Input name="price" id="price" placeholder="" type="number" className="w-full" value={product?.price} />
+                    <Input name="price" id="price" placeholder="" type="number" className="w-full" onChange={handleChange}  value={formData?.price} />
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="message">Instock Amount</Label>
-                    <Input name="instock_amount" id="message" placeholder="" type="number" className="w-full"  value={product?.inStock_amount}/>
+                    <Input name="instock_amount" id="message" placeholder="" type="number" className="w-full" onChange={handleChange}   value={formData?.instock_amount}/>
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
-                    <Input name="category" id="category" placeholder="" className="w-full"  value={product.category}/>
+                    <Input name="category" id="category" placeholder="" className="w-full" onChange={handleChange}   value={formData?.category}/>
                     </div>
 
                     <div className="space-y-2">
                     <Label htmlFor="images">Product Images</Label>
-                    <Input name="images[]" id="images" type="file" multiple className="w-full"  />
+                    <Input name="images[]" id="images" onChange={handleChange}  type="file" multiple className="w-full"  />
+                    <h3 className="text-sm text-blue-700">Note: Uploading Images will replace the old images</h3>
                     </div>
 
                     <CardFooter className="flex justify-end mt-4">
@@ -298,8 +349,12 @@ const Product = async ({params}:{params:IPrams}) => {
                 </div>
             </Container>
 
-        </div>
-     );
+        </div> 
+     ); 
+
+    }else{
+        return <p className="text-center p-8 text-3xl font-bold">Loading...</p>
+    }
 }
  
 export default Product;

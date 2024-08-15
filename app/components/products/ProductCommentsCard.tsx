@@ -5,11 +5,14 @@ import { truncateText } from "@/utils/truncateText";
 import { Rating } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface ProductCardProps {
     data:any
 }
 const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
+
+    const [deletedComments, setDeletedComments] = useState<any>([]);
 
     const productRating= data.reviews.reduce((acc:number, item:any)=>{
         return acc + item.rating
@@ -20,10 +23,30 @@ const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
 
     const router = useRouter();
 
+
+    // Comment Deletion Functionality
+    const commentDeleteFunction = async (comment_id : any) => {
+        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/comment_delete/${comment_id}`);
+
+            if(response.ok){
+
+                alert('Comment Deleted');
+
+                setDeletedComments([...deletedComments, comment_id]);
+
+            }else{
+
+                alert('Something went wrong');
+
+            }
+
+    }
+
+
+
     return (
     <div 
-    onClick={()=> router.push(`/product_edit/${data.id}`)}
-    className="
+    className={`
      col-span-1
      cursor-pointer
      border-[1.2px]
@@ -32,10 +55,17 @@ const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
      p-2
      rounded-sm
      transition
-     hover:scale-105
      text-center
      text-sm
-    ">
+     w-[80vw]
+     md:w-[600px]
+     flex
+     flex-col
+     items-center
+     justify-center
+     align-middle
+     mx-auto
+    `}>
         <div className="
         flex
         flex-col
@@ -43,14 +73,15 @@ const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
         items-center
         gap-1
         ">
-            <div className="aspect-square w-full relative overflow-hidden">
-                {/* <Image
-                fill
-                src={data.images[0].image}
-                alt={data.name}
-                className="w-full h-full object-contain"
-                    /> */}
-                    <img src={data.images[0].image} width={50} height={50}/>
+            <div className=" w-full relative overflow-hidden flex flex-col items-center justify-center">
+                            {/* <Image
+                            fill
+                            src={data.images[0].image}
+                            alt={data.name}
+                            className="w-full h-full object-contain"
+                                /> */}
+                    {/* Product Image */}
+                    <img src={data.images[0].image} width={200} />
             </div>
             <div className="mt-4">
                 {truncateText(data.name)}
@@ -60,11 +91,11 @@ const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
             </div>
             <div>{data.reviews.length} reviews</div>
             <div className="font-semibold">{formatPrice(data.price)}</div>
-            <h2>Product Reviews</h2>
+            <h2 className="text-3xl">Product Reviews</h2>
             {data.reviews.map((review:any)=>(
-                <div className="flex flex-col gap-4" key={review.id}>
-                    <div className="flex gap-2">
-                        <div>
+                <div className={`flex flex-col gap-4 border border-black rounded-lg p-8 w-full justify-center items-center ${deletedComments.includes(review.review_id) ? 'hidden' : ''}`} key={review.review_id}>
+                    <div className="flex flex-col gap-2">
+                        <div className="flex gap-4 justify-center items-center">
                             {/* <Image
                             fill
                             src={review.reviewerAvatar}
@@ -73,13 +104,15 @@ const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
                             sizes="(50px, 50px)"
                             /> */}
                             <img src={review.reviewerAvatar} width={50} height={50} />
+                            <h3>{review.reviewerName}</h3>
                         </div>
                         <div>
-                            <h3>{review.reviewerName}</h3>
-                            <Rating value={review.rating} readOnly/>
+                            
+                            <div className="flex gap-4 justify-center items-center">Rating: <Rating value={review.rating} readOnly/></div>
                         </div>
                     </div>
-                    <div>{review.review}</div>
+                    <div className="flex gap-4 justify-center items-center"><p>Comment: </p><p>{review.review}</p></div>
+                    <button className="bg-red-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110" onClick={()=>commentDeleteFunction(review.review_id)}>Delete</button>
                 </div>
             ))}
         </div>

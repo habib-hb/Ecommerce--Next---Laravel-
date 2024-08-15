@@ -61,6 +61,7 @@ const Product_comments = async() => {
                 // Product review Mapping
                 single_object.customer_name && theReviewsArrayOfObjects.push({
                       // 'reviewerName' : single_object.reviewer_name,
+                      'review_id': single_object.review_id,
                       'reviewerName' : single_object.customer_name,
                       'review' : single_object.review,
                       'reviewerAvatar' : single_object.customer_avatar,
@@ -141,17 +142,24 @@ const Product_comments = async() => {
     
 
   return (
-     <div className="p-8">
+     <div className="p-8 flex flex-col items-center justify-center align-middle">
       <Container>    
 
-        <div className="flex flex-col justify-center items-center p-8">
+        <div className="flex flex-col justify-center items-center p-8 border border-black rounded-lg mb-4">
             <h1 className="text-3xl font-bold">Product Comments Section</h1>
             <p>Click on the specific delete button of the product's comment you want to delete</p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 gap-8 justify-items-center items-center">
           {products.map((product:any)=>{
-              return <ProductCommentsCard data={product} key={Math.random()}/>
+
+              if(product.reviews.length > 0){
+
+               return <ProductCommentsCard data={product} key={Math.random()}/>
+
+              }
+
+              return null;
           })}
         </div>
 

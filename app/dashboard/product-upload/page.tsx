@@ -63,7 +63,8 @@ const ProductUpload = () => {
     
           if (response.ok) {
             // Handle successful form submission
-            alert('Form submitted successfully');
+            let json_data = await response.json();
+            alert(json_data.message);
           } else {
             // Handle errors
             alert('Form submission error - else block');

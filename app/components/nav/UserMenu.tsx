@@ -74,10 +74,19 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
 
 
     // Logout Functionality
-    function logoutProcess(){
-        localStorage.removeItem('loggedInEmail');
-        localStorage.removeItem('eShopCartItems');
-        window.location.href = '/';
+    async function logoutProcess() {
+        await axios.post('http://127.0.0.1:8000/api/logout' , {email : localStorage.getItem('loggedInEmail')})
+        .then((response) => {
+            alert('It was successfull and the data is >>>' + response.data.message);
+        })
+        .catch((error) => {
+            alert('Something Went wrong')
+            console.error(error);
+        });
+
+        // localStorage.removeItem('loggedInEmail');
+        // localStorage.removeItem('eShopCartItems');
+        // window.location.href = '/';
     }
 
     return (
@@ -137,7 +146,7 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
                     <hr/>
                     <MenuItem onClick={()=>{
                         toggleOpen();
-                        signOut();
+                        // signOut();
 
                         // Logout Procedure
                         logoutProcess();

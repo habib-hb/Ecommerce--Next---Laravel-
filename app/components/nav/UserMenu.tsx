@@ -84,9 +84,9 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
             console.error(error);
         });
 
-        // localStorage.removeItem('loggedInEmail');
-        // localStorage.removeItem('eShopCartItems');
-        // window.location.href = '/';
+        localStorage.removeItem('loggedInEmail');
+        localStorage.removeItem('eShopCartItems');
+        window.location.href = '/';
     }
 
     return (

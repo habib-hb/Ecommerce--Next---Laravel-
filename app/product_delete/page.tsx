@@ -1,11 +1,23 @@
+'use client'
+
+
+import { useEffect, useState } from "react";
 import Container from "../components/Container";
 import ProductDeleteCard from "../components/products/ProductDeleteCard";
 
-const Product_delete = async() => {
+const Product_delete = () => {
+
+  const [products, setProducts] = useState<any>([]);
+  const [productLoaded , setProductLoaded] = useState(false);
+
+
+  async function fetchProducts() {
+    
+  
   // ************ The Whole Products Array Part ************
 
     // Extracting Array value from the laravel backend data
-    let products: any = [] // This and the variable below are same
+    // let products: any = []  // This and the variable below are same
 
     let theEntireAllProductArray: any = []
 
@@ -121,7 +133,9 @@ const Product_delete = async() => {
         console.log(theEntireAllProductArray);
 
         // Setting the products Array for later pass down as card data
-        products = theEntireAllProductArray;
+        setProducts(theEntireAllProductArray);
+
+        setProductLoaded(true);
 
 
 
@@ -136,28 +150,42 @@ const Product_delete = async() => {
 
 
 
+  }
 
+    useEffect(() => {
+       !productLoaded && fetchProducts();
+    }, []);
 
     
 
-  return (
-     <div className="p-8">
-      <Container>    
+    if(productLoaded){
 
-        <div className="flex flex-col justify-center items-center p-8">
-            <h1 className="text-3xl font-bold">Product Delete Section</h1>
-            <p>Click on the specific delete button of the product you want to delete</p>
+      return (
+        <div className="p-8">
+          <Container>    
+
+            <div className="flex flex-col justify-center items-center p-8">
+                <h1 className="text-3xl font-bold">Product Delete Section</h1>
+                <p>Click on the specific delete button of the product you want to delete</p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+              {products.map((product:any)=>{
+                  return <ProductDeleteCard data={product} key={Math.random()}/>
+              })}
+            </div>
+
+          </Container>
         </div>
+      )
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
-          {products.map((product:any)=>{
-              return <ProductDeleteCard data={product} key={Math.random()}/>
-          })}
-        </div>
-
-      </Container>
-     </div>
-  )
+    }else{
+      return (
+        <Container>
+            <h1 className="text-3xl font-bold text-center p-8">Loading...</h1>
+        </Container>   
+      )
+    }
 }
  
 export default Product_delete;

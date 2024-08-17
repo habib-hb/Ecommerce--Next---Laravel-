@@ -14,10 +14,13 @@ const Customers = () => {
 
     const [hideTargetedCustomers, setHideTargetedCustomers] = useState<any>([]);
 
+    const [checked_unauthorized, setChecked_unauthorized] = useState(false);
+
     //Extracting the customer data from laravel backend
     async function fetchCustomers() {
-       await axios.get('http://127.0.0.1:8000/api/customers')
+       await axios.get('http://127.0.0.1:8000/api/customers?email='+localStorage.getItem('loggedInEmail'))
         .then((response) => {
+
             console.log(response.data);
 
             setCustomers(response.data);
@@ -25,6 +28,13 @@ const Customers = () => {
         })
         .catch((error) => {
             console.error(error);
+
+            alert(error.response.data.message);
+
+            if(error.response.data.message == 'Admin not found. Thus the request for the data has been denied.'){
+                setChecked_unauthorized(true);
+            }
+
         });
     }
 
@@ -89,11 +99,26 @@ const Customers = () => {
      );
 
     }else{
-      return (
-        <Container>
-            <h1 className="text-3xl text-center p-4">Loading...</h1>
-        </Container>  )    
+
+                if(checked_unauthorized){
+
+                    return (
+                        <Container>
+                            <h1 className="text-3xl text-center p-4">Admin not found. Thus the request for the data has been denied.</h1>
+                        </Container>  )
+                }else{
+
+                
+                    return (
+                        <Container>
+                            <h1 className="text-3xl text-center p-4">Loading...</h1>
+                        </Container>  )   
+
+                    }
+                    
+                    
     }
+
 }
  
 export default Customers;

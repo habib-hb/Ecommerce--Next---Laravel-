@@ -25,11 +25,25 @@ const ProductDeleteCard:React.FC<ProductCardProps> = ({data}) => {
     // const router = useRouter();
 
     let deleteFunction = async () => {
-        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/product_delete/${data.id}`);
+                // document.cookie = "user_id=10; path=/; SameSite=None";
+                // const response = await fetch(`http://127.0.0.1:8000/api/dashboard/product_delete/${data.id}`, {
+                //     method: 'GET', // Ensure this matches your Laravel route
+                //     credentials: 'include' // Ensures cookies are sent with the request
+                // });
+        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/product_delete/${data.id}?email=${localStorage.getItem('loggedInEmail')}`);        
 
         if(response.ok){
-            alert('Product Deleted');
+
+            // alert('Product Deleted');
+            let json_response = await response.json();
+            alert(json_response.message);
+
             setHideComponent(true);
+
+        }else{
+            let json_response = await response.json();
+            alert(json_response.message);
+
         }
 
     }

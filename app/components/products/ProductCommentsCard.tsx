@@ -26,17 +26,19 @@ const ProductCommentsCard:React.FC<ProductCardProps> = ({data}) => {
 
     // Comment Deletion Functionality
     const commentDeleteFunction = async (comment_id : any) => {
-        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/comment_delete/${comment_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/comment_delete/${comment_id}?email=${localStorage.getItem('loggedInEmail')}`);
 
             if(response.ok){
 
-                alert('Comment Deleted');
+                let json_response = await response.json();
+                alert(json_response.message);
 
                 setDeletedComments([...deletedComments, comment_id]);
 
             }else{
 
-                alert('Something went wrong');
+                let json_response = await response.json();
+                alert(json_response.message);
 
             }
 

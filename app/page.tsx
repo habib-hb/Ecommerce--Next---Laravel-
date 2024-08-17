@@ -1,17 +1,28 @@
+'use client'
+
 
 import Container from "./components/Container";
 import HomeBanner from "./components/HomeBanner";
 // import {products} from "../utils/products";
 import { truncateText } from "@/utils/truncateText";
 import ProductCard from "./components/products/ProductCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default async function Home() {
+export default  function Home() {
+
+  const [productLoaded, setProductLoaded] = useState(false);
+
+  const [products, setProducts] = useState<any>([]);
+
+  //Testing Async
+
+      // let products: any = []
+  async function fetchProducts() {
 
   // ************ The Whole Products Array Part ************
 
     // Extracting Array value from the laravel backend data
-    let products: any = [] // This and the variable below are same
+    // let products: any = [] // This and the variable below are same
 
     let theEntireAllProductArray: any = []
 
@@ -127,7 +138,9 @@ export default async function Home() {
         console.log(theEntireAllProductArray);
 
         // Setting the products Array for later pass down as card data
-        products = theEntireAllProductArray;
+        setProducts(theEntireAllProductArray);
+
+        setProductLoaded(true);
 
 
 
@@ -137,25 +150,44 @@ export default async function Home() {
 
     // ========== The Whole Products Array Part End ==========
 
+  }
 
-    console.log('Product REview Check >>>' , products[2]);
+  useEffect(() => {
+   !productLoaded && fetchProducts();
+  }, []);
+
+
+           // console.log('Product REview Check >>>' , products[2]);
 
     
 
-  return (
-     <div className="p-8">
-      <Container>
-        <div>
-          <HomeBanner/>
-        </div>
-        
+      if(productLoaded){  
+              
+      return (
+        <div className="p-8">
+          <Container>
+            <div>
+              <HomeBanner/>
+            </div>
+            
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
-          {products.map((product:any)=>{
-              return <ProductCard data={product} key={Math.random()}/>
-          })}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+              {products.map((product:any)=>{
+                  return <ProductCard data={product} key={Math.random()}/>
+              })}
+            </div>
+          </Container>
         </div>
-      </Container>
-     </div>
-  )
+      )
+
+    }else{
+
+        return (
+            <div className="p-8">
+                <Container>
+                <h1 className="text-3xl text-center p-4">Loading...</h1>
+                </Container>
+            </div>
+        )
+    }
 }

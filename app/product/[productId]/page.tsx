@@ -1,3 +1,6 @@
+'use client'
+
+
 import Container from "@/app/components/Container";
 import ProductDetails from "./ProductDetails";
 import ListRating from "./ListRating";
@@ -5,20 +8,29 @@ import ReviewForm from "./ReviewForm";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 // import { products } from "@/utils/products";
 import { useSession } from 'next-auth/react';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ReviewsProvider } from "./ReviewsContext";
 
 interface IPrams {
     productId:string
 }
 
-const Product = async ({params}:{params:IPrams}) => {
+const Product =  ({params}:{params:IPrams}) => {
     console.log("params" , params)
+
+    const [products, setProducts] = useState<any>([]);
+
+    // For the single perticular product
+    const [product , setProduct] = useState<any>({});
+
+    const [productLoaded, setProductLoaded] = useState(false);
+
+    async function fetchProducts() {
 
    // ************ The Whole Products Array Part ************
 
     // Extracting Array value from the laravel backend data
-    let products: any = [] // This and the variable below are same
+    // let products: any = [] // This and the variable below are same
 
     let theEntireAllProductArray: any = []
 
@@ -132,10 +144,12 @@ const Product = async ({params}:{params:IPrams}) => {
 
 
 
-        console.log(theEntireAllProductArray);
+        console.log('prev statement' , theEntireAllProductArray);
 
         // Setting the products Array for later pass down as card data
-        products = theEntireAllProductArray;
+        setProducts([...theEntireAllProductArray]);
+
+        console.log('All Products >>> ' , products);
 
 
 
@@ -147,15 +161,24 @@ const Product = async ({params}:{params:IPrams}) => {
 
 
     
-    const product = products.find((item: any)=> item.id == params.productId) // Not doing strict equality because the api response of the item.id is string
+    setProduct(theEntireAllProductArray.find((item: any)=> item.id == params.productId)); // Took 'theEntireAllProductArray' instead of 'products' state because the useState uses asycronous system which makes the value of products unavailable in the current run.  Not doing strict equality because the api response of the item.id is string
+
+    setProductLoaded(true);
 
     // testing
-    console.log(product)
+    console.log('Single Specific product >>> ' , product);
 
     // let currentUser = getCurrentUser();
 
+}
 
 
+    useEffect(() => {
+       !productLoaded && fetchProducts();  
+    }, []);
+
+
+    if(product?.id){
     return ( 
         <div className="p-8">
             <Container>
@@ -176,6 +199,16 @@ const Product = async ({params}:{params:IPrams}) => {
 
         </div>
      );
+
+    }else{
+
+        return (
+            <Container>
+                <h1 className="text-3xl text-center p-4">Loading...</h1>
+            </Container>
+        )
+
+    }
 }
  
 export default Product;

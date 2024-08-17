@@ -58,7 +58,9 @@ const Product =  ({params}:{params:IPrams}) => {
 
     // Doing another method
     async function productExtractionOperation (){
+
     try{
+
         let someApiData = await fetch('http://127.0.0.1:8000/api/products');
 
         if(!someApiData.ok){
@@ -235,9 +237,11 @@ const Product =  ({params}:{params:IPrams}) => {
 
 
       const handleSubmit = async (e:any) => {
+
         e.preventDefault();
     
         const data = new FormData();
+        data.append('user_email', localStorage.getItem('loggedInEmail') || '');
         data.append('product_id', formData.product_id);
         data.append('product_name', formData.product_name);
         data.append('description', formData.description);
@@ -267,7 +271,8 @@ const Product =  ({params}:{params:IPrams}) => {
           } else {
 
             // Handle errors
-            alert('Form submission error - else block');
+            const errorData = await response.json(); // Parse the JSON error response
+            alert( 'Form submission error: ' + errorData.message);
 
           }
         } catch (error) {

@@ -38,30 +38,67 @@ const LoginForm: React.FC<LoginFormProps> = ({currentUser}) => {
         }
     }, [])
 
-    const onSubmit:SubmitHandler<FieldValues> = (data)=>{
-        setIsLoading(true)
-        signIn('credentials', {
-            ...data,
-            redirect: false
-        }).then((callback) => {
+    const onSubmit:SubmitHandler<FieldValues> = async(data)=>{
+        // setIsLoading(true)
+        // signIn('credentials', {
+        //     ...data,
+        //     redirect: false
+        // }).then((callback) => {
 
-            setIsLoading(false)
+        //     setIsLoading(false)
 
-            if(callback?.ok){
-                router.push("/cart");
-                router.refresh();
+        //     if(callback?.ok){
+        //         router.push("/cart");
+        //         router.refresh();
+        //         toast.success('Logged In')
+        //     }
+
+        //     if(callback?.error){
+        //         toast.error(callback.error)
+        //     }
+        // } );
+
+        await fetch('http://127.0.0.1:8000/api/login' , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(async(response) => {
+            if(response.ok){
                 toast.success('Logged In')
-            }
+                    // router.push("/cart");
+                    // router.refresh();
+                let json_response =await response.json();
 
-            if(callback?.error){
-                toast.error(callback.error)
+                alert(json_response.message);
+
+                alert('User Email >>> ' + json_response.user.email);
+
+                localStorage.setItem('loggedInEmail' , json_response.user.email);
+
+                window.location.href = '/';
+
+            }else{
+                let json_response =await response.json();
+
+                alert(json_response.message);
+
+                toast.error('Something went wrong')
             }
-        } );
+        }).catch(async(error) => {
+
+
+            // toast.error('Something went wrong')
+
+            
+        })
+        
     };
 
-    if(currentUser){
-        return <p className="text-center">Logged In. Redirecting...</p>
-    }
+    // if(currentUser){
+    //     return <p className="text-center">Logged In. Redirecting...</p>
+    // }
 
     return ( 
         <>

@@ -156,6 +156,9 @@ export default  function Home() {
    !productLoaded && fetchProducts();
   }, []);
 
+  //  testing order card
+  console.log('This is the cart items >>> ' , localStorage.getItem('eShopCartItems'));
+
 
            // console.log('Product REview Check >>>' , products[2]);
 

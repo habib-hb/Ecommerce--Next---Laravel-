@@ -1,31 +1,32 @@
 'use client'
 
-import Container from "../components/Container";
+import Container from "../../components/Container";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const Admins = () => {
+const Add_admin = () => {
 
 
-    const [admins , setAdmins] = useState<any>([]);
+    const [customers , setCustomers] = useState<any>([]);
 
     const [dialogBoxOpen, setDialogBoxOpen] = useState(false);
 
-    const [targetedAdmin, setTargetedAdmin] = useState<any>('');
+    const [targetedCustomer, setTargetedCustomer] = useState<any>('');
 
-    const [hideTargetedAdmins, setHideTargetedAdmins] = useState<any>([]);
+    const [hideTargetedCustomers, setHideTargetedCustomers] = useState<any>([]);
 
     const [checked_unauthorized, setChecked_unauthorized] = useState(false);
 
 
     //Extracting the Admins data from laravel backend
-    async function fetchAdmins() {
-        await axios.get('http://127.0.0.1:8000/api/admins?email='+localStorage.getItem('loggedInEmail'))
+    async function fetchPotentialAdmins() {
+
+        await axios.get('http://127.0.0.1:8000/api/add_admin_get_customers?email='+localStorage.getItem('loggedInEmail'))
          .then((response) => {
  
              console.log(response.data);
  
-             setAdmins(response.data);
+             setCustomers(response.data);
  
          })
          .catch((error) => {
@@ -38,44 +39,63 @@ const Admins = () => {
              }
  
          });
+
      }
 
 
 
      // Calling the above function within the useEffect
     useEffect(() => {
-        fetchAdmins();
+        fetchPotentialAdmins();
     }, [])
 
 
 
-    async function deleteAdmin(admin_id : any) {
-        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/admin_delete/${admin_id}?email=${localStorage.getItem('loggedInEmail')}`);
+    async function addAdmin(customer_id : any) {
+
+        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/add_admin_insert_customer` , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({targeted_customer_id : customer_id , admin_email : localStorage.getItem('loggedInEmail')})
+        });
+
         if(response.ok){
-            alert('Admin Deleted');
+
+            alert('Admin Added');
+
             setDialogBoxOpen(false);
-            setHideTargetedAdmins([...hideTargetedAdmins, admin_id]);
+
+            setHideTargetedCustomers([...hideTargetedCustomers, customer_id]);
+
         }else{
+
             alert('Something went wrong');
+
         }
+
     }
 
 
-    if(admins.length > 0){
+    if(customers.length > 0){
 
     return ( 
         <Container>
 
-           <h1 className="text-3xl text-center p-4 border border-black max-w-[400px] mx-auto my-8">Admins</h1>
+           <h1 className={`text-3xl text-center p-4 border border-black max-w-[400px] mx-auto my-8 ${dialogBoxOpen ? 'opacity-50' : ''}`}>Admins</h1>
 
-           {admins.map((admin:any)=>{
+           {/* Only taking the potential admins */}
+           {customers.filter((customer:any)=>(customer.admin_email == null)).map((customer:any)=>{
                 return (
-                    <div className={`flex flex-col justify-center items-center p-8 border border-black rounded-lg mb-4 shadow-lg ${dialogBoxOpen ? 'opacity-50' : ''} ${hideTargetedAdmins.includes(admin.user_id) ? 'hidden' : ''}`}>
+                    <div className={`flex flex-col justify-center items-center p-8 border border-black rounded-lg mb-4 shadow-lg ${dialogBoxOpen ? 'opacity-50' : ''} ${hideTargetedCustomers.includes(customer.customer_id) ? 'hidden' : ''}`}>
                         
-                        <img src={admin.customer_avatar} alt={admin.customer_name} className="w-64 h-64 rounded-full mb-4" />
-                        <h1 className="text-2xl font-bold">{admin.customer_name}</h1>
-                        <p>{admin.admin_email}</p>
-                        <button className="bg-red-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={() => {setDialogBoxOpen(true); setTargetedAdmin(admin.user_id)}}>Delete</button>
+                        <img src={customer.customer_avatar} alt={customer.customer_name} className="w-64 h-64 rounded-full mb-4" />
+                        <h1 className="text-2xl font-bold">{customer.customer_name}</h1>
+
+                        <p>{customer.email}</p>
+
+                        <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={() => {setDialogBoxOpen(true); setTargetedCustomer(customer.customer_id)}}>Add As Admin</button>
 
 
                     </div>
@@ -89,10 +109,10 @@ const Admins = () => {
                         
                         <div className="flex flex-col justify-center items-center">
 
-                        <p className="text-red-600 text-2xl text-center p-8">Are You Sure You Want To Delete This Customer?</p>
+                        <p className="text-blue-600 text-2xl text-center p-8">Are You Sure You Want To Add This User As An Admin?</p>
 
                             <div className="flex gap-4">
-                             <button className="bg-red-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>deleteAdmin(targetedAdmin)}>Delete</button>
+                             <button className="bg-blue-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>addAdmin(targetedCustomer)}>Add</button>
 
                              <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>setDialogBoxOpen(false)}>Cancel</button>
                              </div>
@@ -101,8 +121,7 @@ const Admins = () => {
 
 
 
-             {/* Add Admin Functionality */}
-             <a href="/admins/add_admin"><button className="block bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-8 mx-auto">Add Admin</button></a>
+            
 
 
         </Container>
@@ -129,4 +148,4 @@ const Admins = () => {
     }
 }
  
-export default Admins;
+export default Add_admin;

@@ -78,7 +78,7 @@ const CartClient: React.FC<CartClientProps> = ({currentUser}) => {
                    
                     <p className="text-slate-500">Taxes and shipping calculate at checkout</p>
 
-                    <Button label={currentUser ? "Checkout" : "Login To Checkout"}
+                    <Button label={"Place Order"}
                         outline= { currentUser ? false : true }
                     onClick={()=>{
                         currentUser ? router.push('/checkout') : router.push('/login')

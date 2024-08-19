@@ -15,6 +15,8 @@ const Orders = () => {
 
     const [deliveredUpdateFunctionParameters , setDeliveredUpdateFunctionParameters] = useState<any>({});
 
+    const [removeProductFunctionParameters , setRemoveProductFunctionParameters] = useState<any>({});
+
     async function fetchAllOrdersData() {
 
         const response = await fetch('http://127.0.0.1:8000/api/dashboard/all_orders_data');
@@ -46,7 +48,7 @@ const Orders = () => {
     }, [orders])
 
 
-
+  // Delivered Product Funtionality
    async function delivered_product(details : any) {
 
         let updated_order_details = details.order_details.filter((product : any) => {
@@ -90,13 +92,13 @@ const Orders = () => {
                         headers : {
                             'Content-Type' : 'application/json'
                         },
-                        
+
                         body : JSON.stringify({order_id : details.order_id })
                     });
 
                     if(response.ok) {
 
-                        alert('Product Removed')
+                        alert('Order Fulfilled')
 
                         setDeliveredDialogBoxOpen(false)
 
@@ -110,6 +112,77 @@ const Orders = () => {
             }   
         
    }
+
+
+
+   // Deleting Product Funtionality
+    async function remove_product(details : any) {
+
+        let updated_order_details = details.order_details.filter((product : any) => {
+
+            return product.id != details.product_id
+
+        });
+
+            console.log('Previous Order Data >>>' , details.order_details);
+            console.log('Updated Order Data >>>' , updated_order_details);
+
+        
+
+            if(updated_order_details.length > 0) {
+                // Post request to deliver product
+                const response = await fetch('http://127.0.0.1:8000/api/dashboard/order_delivered' , {
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify({order_id : details.order_id , orders_data : updated_order_details})
+                });
+
+                if(response.ok) {
+                    alert('Product Order Deleted')
+
+                    setremovedDialogBoxOpen(false)
+
+                    setOrders([]);
+
+
+                }else{
+                    alert('Something went wrong')
+                }
+
+            }else{
+
+                    // Post request to deliver product
+                    const response = await fetch('http://127.0.0.1:8000/api/dashboard/delete_order' , {
+
+                        method : 'POST',
+
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        },
+
+                        body : JSON.stringify({order_id : details.order_id })
+                    });
+
+                    if(response.ok) {
+
+                        alert('Order Removed')
+
+                        setremovedDialogBoxOpen(false)
+
+                        setOrders([]);
+
+
+                    }else{
+                        alert('Something went wrong while deleting the order')
+                    }
+
+            }   
+        
+    }
+
+
 
 
     if(orders?.length > 0) {
@@ -169,7 +242,13 @@ const Orders = () => {
 
                                                     }}>Mark As Delivered</button>
 
-                                                <button className="bg-red-700 text-white w-[90%] md:w-[50%] my-4 py-2 rounded-lg hover:scale-110">Reject Order</button>
+                                                <button className="bg-red-700 text-white w-[90%] md:w-[50%] my-4 py-2 rounded-lg hover:scale-110" onClick={()=>{ 
+                                                      
+                                                      setRemoveProductFunctionParameters({order_id : order.order_id , product_id: data.id ,  order_details : orderDataJson});
+  
+                                                      setremovedDialogBoxOpen(true)
+  
+                                                      }}>Reject Order</button>
 
                                             </div>
 
@@ -179,12 +258,29 @@ const Orders = () => {
                                             
                                             <div className="flex flex-col justify-center items-center">
 
-                                            <p className="text-blue-600 text-2xl text-center p-8">Are You Sure You This Product Has Been Delivered To The Customer?</p>
+                                            <p className="text-blue-600 text-2xl text-center p-8">Are You Sure That This Product Has Been Delivered To The Customer?</p>
 
                                                      <div className="flex gap-4">
-                                                        <button className="bg-blue-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>delivered_product(deliveredUpdateFunctionParameters)}>Mark {deliveredUpdateFunctionParameters.product_id}</button>
+                                                        <button className="bg-blue-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>delivered_product(deliveredUpdateFunctionParameters)}>Delivered {deliveredUpdateFunctionParameters.product_id}</button>
 
                                                         <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>setDeliveredDialogBoxOpen(false)}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            {/* Remove Product Dialoge Box Feature */}
+                                            <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[50vh] w-[80vw] md:w-[50vw] border border-black bg-gray-100 rounded-lg shadow-xl flex flex-col items-center justify-center ${removedDialogBoxOpen ? '' : 'hidden'}`}>
+                                            
+                                            <div className="flex flex-col justify-center items-center">
+
+                                            <p className="text-red-600 text-2xl text-center p-8">Are You Sure You Want To Reject This Product Order?</p>
+
+                                                     <div className="flex gap-4">
+                                                        <button className="bg-red-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>remove_product(removeProductFunctionParameters)}>Delete {removeProductFunctionParameters.product_id}</button>
+
+                                                        <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>setremovedDialogBoxOpen(false)}>Cancel</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -7,6 +7,14 @@ import Container from "../components/Container";
 const Orders = () => {
     const [orders , setOrders] = useState<any>([]);
 
+    const [deliveredDialogBoxOpen, setDeliveredDialogBoxOpen] = useState(false);
+
+    const [removedDialogBoxOpen, setremovedDialogBoxOpen] = useState(false);
+
+    const [targetedProduct, setTargetProduct] = useState<any>('');
+
+    const [deliveredUpdateFunctionParameters , setDeliveredUpdateFunctionParameters] = useState<any>({});
+
     async function fetchAllOrdersData() {
 
         const response = await fetch('http://127.0.0.1:8000/api/dashboard/all_orders_data');
@@ -37,6 +45,29 @@ const Orders = () => {
     }, [])
 
 
+
+   async function delivered_product(details : any) {
+
+        let updated_order_details = details.order_details.filter((product : any) => {
+            return product.id != details.product_id
+        });
+
+            console.log('Previous Order Data >>>' , details.order_details);
+            console.log('Updated Order Data >>>' , updated_order_details);
+
+         
+                // // Post request to deliver product
+                // const response = await fetch('http://127.0.0.1:8000/api/dashboard/order_delivered' , {
+                //     method : 'POST',
+                //     headers : {
+                //         'Content-Type' : 'application/json'
+                //     },
+                //     body : JSON.stringify({order_id : order_id , order_details : updated_order_details})
+                // });
+        
+   }
+
+
     if(orders?.length > 0) {
 
         // [{"id":1,"name":"iphone 14","description":"Short description","category":"Phone","brand":"apple","selectedImg":{"image":"https://m.media-amazon.com/images/I/71p-tHQ0u1L._AC_SX679_.jpg","color":"White","colorCode":"#FFFFFF"},"quantity":2,"price":"2999.00"},{"id":26,"name":"really!","description":"fdsf","category":"trt","brand":"dsfd","selectedImg":{"image":"http://127.0.0.1:8000/storage/images/rokia afzal.jpeg","color":"rokia afzal","colorCode":"#ff2245"},"quantity":2,"price":"454.00"}]
@@ -46,7 +77,7 @@ const Orders = () => {
                 <Container>
 
                         <h1 className="text-3xl text-center p-4 border border-black max-w-[400px] mx-auto my-8 rounded-lg">All Orders</h1>
-                    {/* The user specific Data Based on Users */}
+                    {/* The user specific Data Based on Users. 'Orders' represents the array laravel created from all the order data available on the 'orders' table on the backend. */}
                     {orders.map((order : any) => {
                             let orderDataJson = JSON.parse(order.orders_data);
 
@@ -71,12 +102,12 @@ const Orders = () => {
 
                                         </div>
 
-                            {/* The Products ordered by the specific user */}
+                            {/* The Products ordered by the specific user. This data is processed from the whole array that is received as string format from a single 'orders' table's row. This array presents the ordered products ordered by the specific user  */}
                             { orderDataJson.map((data : any) => {
 
                                     // The products data
                                     return (
-                                            <div>
+                                        <div>
 
                                             <div className="w-[90%] mx-auto bg-slate-200 p-8 rounded-lg my-8 flex flex-col justify-center items-center border border-black shadow-md">
                                                 <img src={data.selectedImg.image} alt="" className="h-[200px] mx-auto mb-2" />
@@ -86,13 +117,37 @@ const Orders = () => {
 
                                                 <h1 className="text-lg">Quantity : <span className="text-2xl font-bold">{data.quantity}</span></h1>
 
-                                                <button className="bg-blue-700 text-white w-[90%] md:w-[50%] my-4 py-2 rounded-lg hover:scale-110">Mark As Delivered</button>
+                                                <button className="bg-blue-700 text-white w-[90%] md:w-[50%] my-4 py-2 rounded-lg hover:scale-110" onClick={()=>{ 
+                                                      
+                                                    setDeliveredUpdateFunctionParameters({order_id : order.order_id , product_id: data.id ,  order_details : orderDataJson});
+
+                                                    setDeliveredDialogBoxOpen(true)
+
+                                                    }}>Mark As Delivered</button>
 
                                                 <button className="bg-red-700 text-white w-[90%] md:w-[50%] my-4 py-2 rounded-lg hover:scale-110">Reject Order</button>
 
                                             </div>
 
+
+                                            {/* Delivered Dialoge Box Feature */}
+                                            <div className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[50vh] w-[80vw] md:w-[50vw] border border-black bg-gray-100 rounded-lg shadow-xl flex flex-col items-center justify-center ${deliveredDialogBoxOpen ? '' : 'hidden'}`}>
+                                            
+                                            <div className="flex flex-col justify-center items-center">
+
+                                            <p className="text-blue-600 text-2xl text-center p-8">Are You Sure You This Product Has Been Delivered To The Customer?</p>
+
+                                                     <div className="flex gap-4">
+                                                        <button className="bg-blue-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>delivered_product(deliveredUpdateFunctionParameters)}>Mark {deliveredUpdateFunctionParameters.product_id}</button>
+
+                                                        <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>setDeliveredDialogBoxOpen(false)}>Cancel</button>
+                                                    </div>
+                                                </div>
                                             </div>
+
+
+
+                                        </div>
                                       
                                     )
                                     

@@ -33,6 +33,7 @@ const Orders = () => {
 
             alert(json_response.message);
 
+
         }
 
     }
@@ -42,7 +43,7 @@ const Orders = () => {
 
         orders.length == 0 && fetchAllOrdersData();
         
-    }, [])
+    }, [orders])
 
 
 
@@ -56,14 +57,57 @@ const Orders = () => {
             console.log('Updated Order Data >>>' , updated_order_details);
 
          
-                // // Post request to deliver product
-                // const response = await fetch('http://127.0.0.1:8000/api/dashboard/order_delivered' , {
-                //     method : 'POST',
-                //     headers : {
-                //         'Content-Type' : 'application/json'
-                //     },
-                //     body : JSON.stringify({order_id : order_id , order_details : updated_order_details})
-                // });
+
+            if(updated_order_details.length > 0) {
+                // Post request to deliver product
+                const response = await fetch('http://127.0.0.1:8000/api/dashboard/order_delivered' , {
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify({order_id : details.order_id , orders_data : updated_order_details})
+                });
+
+                if(response.ok) {
+                    alert('Product Delivered')
+
+                    setDeliveredDialogBoxOpen(false)
+
+                    setOrders([]);
+
+
+                }else{
+                    alert('Something went wrong')
+                }
+
+            }else{
+
+                    // Post request to deliver product
+                    const response = await fetch('http://127.0.0.1:8000/api/dashboard/delete_order' , {
+
+                        method : 'POST',
+
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        },
+                        
+                        body : JSON.stringify({order_id : details.order_id })
+                    });
+
+                    if(response.ok) {
+
+                        alert('Product Removed')
+
+                        setDeliveredDialogBoxOpen(false)
+
+                        setOrders([]);
+
+
+                    }else{
+                        alert('Something went wrong while deleting the order')
+                    }
+
+            }   
         
    }
 

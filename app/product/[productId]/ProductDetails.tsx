@@ -129,6 +129,9 @@ const ProductDetails:React.FC<Product> = ({product}) => {
             <div>
                 <span className="font-semibold">BRAND: </span> {product.brand}
             </div>
+            <div>
+                <span className="font-semibold">PRICE: </span> {product.price}
+            </div>
             <div className={product.inStock ? "text-teal-400" : "text-rose-400"}>{product.inStock ? "In Stock" : "Out Of Stock"}</div>
             <Horizontal/>
 

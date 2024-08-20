@@ -261,7 +261,7 @@ const Orders = () => {
                                             <p className="text-blue-600 text-2xl text-center p-8">Are You Sure That This Product Has Been Delivered To The Customer?</p>
 
                                                      <div className="flex gap-4">
-                                                        <button className="bg-blue-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>delivered_product(deliveredUpdateFunctionParameters)}>Delivered {deliveredUpdateFunctionParameters.product_id}</button>
+                                                        <button className="bg-blue-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>delivered_product(deliveredUpdateFunctionParameters)}>Delivered</button>
 
                                                         <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>setDeliveredDialogBoxOpen(false)}>Cancel</button>
                                                     </div>
@@ -278,7 +278,7 @@ const Orders = () => {
                                             <p className="text-red-600 text-2xl text-center p-8">Are You Sure You Want To Reject This Product Order?</p>
 
                                                      <div className="flex gap-4">
-                                                        <button className="bg-red-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>remove_product(removeProductFunctionParameters)}>Delete {removeProductFunctionParameters.product_id}</button>
+                                                        <button className="bg-red-600 text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>remove_product(removeProductFunctionParameters)}>Delete</button>
 
                                                         <button className="bg-black text-white rounded-lg px-4 py-2 w-[50%] md:w-[150px] hover:scale-110 mt-2" onClick={()=>setremovedDialogBoxOpen(false)}>Cancel</button>
                                                     </div>

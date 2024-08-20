@@ -12,37 +12,186 @@ const Order_placement = () => {
 
     let orderer_email = localStorage.getItem('loggedInEmail');
 
-    let order_details = {
-        ordered_products : ordered_products,
-        orderer_email : orderer_email
-    }
 
+
+    // Order Placement Function
     async function placeOrder() {
-        let response = await fetch('http://127.0.0.1:8000/api/dashboard/order_placement' , {
-            method : 'POST',
-            headers : {
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify(order_details)
-        })
+
+            let response = await fetch('http://127.0.0.1:8000/api/dashboard/all_orders_data')
 
         if(response.ok) {
 
-            alert('Order Placed')
+                let json_response = await response.json();
 
-            setOrder_placed(true)
+                console.log(json_response);
 
-        }else {
+                let userSpecificPreviousOrder = json_response.filter((order : any) => {
+                    return order.user_email == orderer_email
+                })
 
-            alert('Something went wrong')
+            if(userSpecificPreviousOrder.length > 0) {
 
-        }
-    }
+                    // alert('Previous Data Found')
+
+                    let userSpecificPreviousOrdersData = JSON.parse(userSpecificPreviousOrder[0].orders_data);
+
+                    let previousOrderProductIds:any = [];
+
+                    userSpecificPreviousOrdersData.forEach((product : any) => {
+
+                        previousOrderProductIds.push(product.id)
+
+                    })
+
+                    let newly_ordered_products_json = JSON.parse(ordered_products)
+
+                    let updatedOrdersData = newly_ordered_products_json.map((product : any) => {
+
+                        if(previousOrderProductIds.includes(product.id)) {
+
+                           let productPreviousOrderDataFilteredProduct = userSpecificPreviousOrdersData.filter((data : any) => {
+                                return data.id == product.id
+                            })
+
+                           let productPreviousOrderData = productPreviousOrderDataFilteredProduct[0]; 
+
+                           // Updating the previous order data
+                           userSpecificPreviousOrdersData = userSpecificPreviousOrdersData.filter((product : any) => {
+                                return product.id != productPreviousOrderData.id
+                           })
+                            
+                           let productNewOrderDataFilteredArray = newly_ordered_products_json.filter((data : any) => {
+                                return data.id == product.id
+                            })
+
+                           let productNewOrderData = productNewOrderDataFilteredArray[0];
+
+                           let productUpdatedProductData = {...productNewOrderData, "quantity": parseInt(productNewOrderData.quantity) + parseInt(productPreviousOrderData.quantity)}
+
+                           return productUpdatedProductData;
+
+                        }else{
+
+                            return product
+
+                        }
+
+                    })
+
+                    // Combining the newly added or newly updated data with the previous data
+                    updatedOrdersData = [...updatedOrdersData , ...userSpecificPreviousOrdersData]
+
+
+                    // Placing the updated Order
+                    let order_details = {
+                        ordered_products : JSON.stringify(updatedOrdersData),
+                        orderer_email : orderer_email
+                    }
+
+                    let response = await fetch('http://127.0.0.1:8000/api/dashboard/order_placement' , {
+                        method : 'POST',
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        },
+                        body : JSON.stringify(order_details)
+                    })
+            
+                    if(response.ok) {
+            
+                        // alert('Updated Order Placed')
+
+                        localStorage.removeItem('eShopCartItems')
+            
+                        setOrder_placed(true)
+
+                        window.location.href = '/'
+            
+                    }else {
+            
+                        alert('Something went wrong within the updated order placement')
+            
+                    }
+                    
+                    
+
+            }else{
+
+
+                    // alert('No Previous Data Found')
+
+                    let order_details = {
+                        ordered_products : ordered_products,
+                        orderer_email : orderer_email
+                    }
+
+                    let response = await fetch('http://127.0.0.1:8000/api/dashboard/order_placement' , {
+                        method : 'POST',
+                        headers : {
+                            'Content-Type' : 'application/json'
+                        },
+                        body : JSON.stringify(order_details)
+                    })
+            
+                    if(response.ok) {
+            
+                        // alert('New Order Placed')
+
+                        localStorage.removeItem('eShopCartItems')
+            
+                        setOrder_placed(true)
+
+                        window.location.href = '/'
+            
+                    }else {
+            
+                        alert('Something went wrong')
+            
+                    }
+
+                }
+
+        }else{
+
+                // alert('First Order Placement')
+
+                let order_details = {
+                    ordered_products : ordered_products,
+                    orderer_email : orderer_email
+                }
+
+                let response = await fetch('http://127.0.0.1:8000/api/dashboard/order_placement' , {
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify(order_details)
+                })
+        
+                if(response.ok) {
+        
+                    // alert('Very First Order Placed')
+
+                    localStorage.removeItem('eShopCartItems')
+        
+                    setOrder_placed(true)
+
+                    window.location.href = '/'
+        
+                }else {
+        
+                    alert('Something went wrong')
+        
+                }
+
+            }
+
+       }
+
 
 
     useEffect(() => {
 
-        placeOrder()
+        !order_placed && ordered_products && placeOrder()
         
     }, [])
 

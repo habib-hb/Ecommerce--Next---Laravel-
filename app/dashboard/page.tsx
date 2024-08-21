@@ -77,7 +77,7 @@ const Dashboard = () => {
                 </div>
                 </a>
 
-                <a href="/orders" className="text-2xl  text-white rounded-lg  cursor-pointer  w-[90vw] md:w-[60vw] text-center ">
+                <a href="/banner_upload" className="text-2xl  text-white rounded-lg  cursor-pointer  w-[90vw] md:w-[60vw] text-center ">
                 <div className="flex flex-col bg-slate-600 justify-center items-center my-4 p-2  shadow-lg hover:scale-125 rounded-lg">
 
                         <img src="/images_icons/product_banner.png" className="h-14 w-14"/>

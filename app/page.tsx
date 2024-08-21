@@ -14,6 +14,10 @@ export default  function Home() {
 
   const [products, setProducts] = useState<any>([]);
 
+  // Testing Banner Pic 
+  const [imageData, setImageData] = useState('');
+  // End Testing Banner Pic
+
   //Testing Async
 
       // let products: any = []
@@ -138,9 +142,45 @@ export default  function Home() {
         console.log(theEntireAllProductArray);
 
         // Setting the products Array for later pass down as card data
-        setProducts(theEntireAllProductArray);
+        // setProducts(theEntireAllProductArray);
 
-        setProductLoaded(true);
+        // setProductLoaded(true);
+
+
+
+
+          // Testing The Banner Picture Load 
+
+          // const handleImageLoad = async() => {
+
+            const response = await fetch('http://127.0.0.1:8000/api/dashboard/get_banner_picture');
+    
+            if(response.ok) {
+    
+                let json_response = await response.json();
+    
+                setImageData(json_response.banner_url);
+    
+            }else{
+    
+                console.error('Something went wrong with the banner image.');
+    
+            }
+    
+            
+        // }
+
+
+            // handleImageLoad();
+
+
+          // End Testing The Banner Picture Load
+
+          setProducts(theEntireAllProductArray);
+
+          setProductLoaded(true);
+
+
 
 
 
@@ -167,14 +207,32 @@ export default  function Home() {
       if(productLoaded){  
               
       return (
-        <div className="p-8">
+        <div className="">
           <Container>
+
+
             <div>
-              <HomeBanner/>
+
+
+              {/* <HomeBanner/> */}
+
+              {imageData !== '' && (
+                      <div>
+                                    
+                      <img 
+                      src={imageData}
+                      alt="Banner Image"
+                      className="w-full p-4"
+                      />
+
+                  </div>
+              )}
+
+
             </div>
             
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8 pt-4">
               {products.map((product:any)=>{
                   return <ProductCard data={product} key={Math.random()}/>
               })}

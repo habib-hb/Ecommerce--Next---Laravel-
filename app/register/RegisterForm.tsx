@@ -77,7 +77,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({currentUser}) => {
 
             toast.success('Account created');
 
-            localStorage.setItem('loggedInEmail' , data.email);
+            typeof window !== 'undefined' ?  window?.localStorage.setItem('loggedInEmail' , data.email) : '';
 
             window.location.href='/';
 

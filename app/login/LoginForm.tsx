@@ -75,7 +75,7 @@ const LoginForm: React.FC<LoginFormProps> = ({currentUser}) => {
 
                 alert('User Email >>> ' + json_response.user.email);
 
-                localStorage.setItem('loggedInEmail' , json_response.user.email);
+                typeof window !== 'undefined' && window?.localStorage.setItem('loggedInEmail' , json_response.user.email);
 
                 window.location.href = '/';
 

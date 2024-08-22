@@ -197,7 +197,9 @@ export default  function Home() {
   }, []);
 
   //  testing order card
-  console.log('This is the cart items >>> ' , localStorage.getItem('eShopCartItems'));
+  useEffect(() => {
+  console.log('This is the cart items >>> ' , typeof window !== 'undefined' ? window?.localStorage.getItem('eShopCartItems') : '' );
+  }, []);
 
 
            // console.log('Product REview Check >>>' , products[2]);

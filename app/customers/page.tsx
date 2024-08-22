@@ -18,7 +18,7 @@ const Customers = () => {
 
     //Extracting the customer data from laravel backend
     async function fetchCustomers() {
-       await axios.get('http://127.0.0.1:8000/api/customers?email='+localStorage.getItem('loggedInEmail'))
+       await axios.get('http://127.0.0.1:8000/api/customers?email='+( typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : ''))
         .then((response) => {
 
             console.log(response.data);

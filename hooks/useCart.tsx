@@ -37,11 +37,11 @@ const [paymentIntent , setPaymentIntent] = useState<string | null>(null)
 
 
 useEffect(()=>{
-    const cartItems:any = localStorage.getItem("eShopCartItems");
+    const cartItems:any =   typeof window !== 'undefined' ?  window?.localStorage.getItem("eShopCartItems") : '';
 
     const cProducts: CartProductType[] | null = JSON.parse(cartItems);
 
-    const eShopPaymentIntent:any = localStorage.getItem('eShopPaymentIntent')
+    const eShopPaymentIntent:any =typeof window !== 'undefined' ?  window?.localStorage.getItem('eShopPaymentIntent') : '';
     const paymentIntent: string | null = JSON.parse(eShopPaymentIntent)
 
     setCartProducts(cProducts);
@@ -90,7 +90,7 @@ const handleAddProductToCart = useCallback((product:CartProductType)=>{
 
         toast.success("Product added to cart");
 
-        localStorage.setItem('eShopCartItems' , JSON.stringify(updatedCart))
+        typeof window !== 'undefined' && window?.localStorage.setItem('eShopCartItems' , JSON.stringify(updatedCart))
 
         return updatedCart;
     })
@@ -108,7 +108,7 @@ const handleRemoveProductFromCart = useCallback((product: CartProductType)=>{
 
         toast.success("Product removed");
 
-        localStorage.setItem('eShopCartItems' , JSON.stringify(filteredProducts))
+        typeof window !== 'undefined' &&  window?.localStorage.setItem('eShopCartItems' , JSON.stringify(filteredProducts))
 
 
 
@@ -134,7 +134,7 @@ const handleCartQtyIncrease = useCallback((product: CartProductType)=>{
         }
 
         setCartProducts(updatedCart)
-        localStorage.setItem('eShopCartItems' , JSON.stringify(updatedCart))
+        typeof window !== 'undefined' &&  window?.localStorage.setItem('eShopCartItems' , JSON.stringify(updatedCart))
  
     }
 
@@ -159,7 +159,7 @@ const handleCartQtyDecrease = useCallback((product: CartProductType)=>{
         }
 
         setCartProducts(updatedCart)
-        localStorage.setItem('eShopCartItems' , JSON.stringify(updatedCart))
+        typeof window !== 'undefined' &&  window?.localStorage.setItem('eShopCartItems' , JSON.stringify(updatedCart))
  
     }
 
@@ -169,13 +169,13 @@ const handleCartQtyDecrease = useCallback((product: CartProductType)=>{
 const handleClearCart = useCallback(()=>{
     setCartProducts(null)
     setCartTotalQty(0)
-    localStorage.setItem("eShopCartItems" , JSON.stringify(null));
+    typeof window !== 'undefined' &&  window?.localStorage.setItem("eShopCartItems" , JSON.stringify(null));
 } , [cartProducts])
 
 
 const handleSetPaymentIntent = useCallback((val: string | null)=>{
     setPaymentIntent(val);
-    localStorage.setItem("eShopPaymentIntent", JSON.stringify(val))
+    typeof window !== 'undefined' &&  window?.localStorage.setItem("eShopPaymentIntent", JSON.stringify(val))
 }, [paymentIntent])
 
 const value = {

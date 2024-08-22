@@ -10,7 +10,7 @@ const Profile = () => {
     // Retriving The user Data from backend database
     const [user , setUser] = useState<any>(null);
 
-    const userAcc = localStorage.getItem('loggedInEmail');
+    const userAcc =   typeof window !== 'undefined' ?  window?.localStorage.getItem('loggedInEmail') : '';
 
     async function userDataExtraction() {
         await axios.post('http://127.0.0.1:8000/api/user_data_retrive' , {

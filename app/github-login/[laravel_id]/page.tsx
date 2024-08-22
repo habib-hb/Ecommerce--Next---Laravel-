@@ -17,7 +17,7 @@ const GithubLogin =({params}: any) => {
 
             let github_email_data = response.data;
 
-            localStorage.setItem('loggedInEmail', github_email_data.email);
+            typeof window !== 'undefined' && window?.localStorage.setItem('loggedInEmail', github_email_data.email);
 
             console.log('github email >>>', github_email_data.email);
 

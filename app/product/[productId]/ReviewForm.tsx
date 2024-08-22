@@ -99,7 +99,7 @@ const ReviewForm:React.FC<ReviewFormProps>  = ({product }) => {
 
     // *** Retriving The current user from the laravel database
             // const ParsedcurrentUser = JSON.parse(currentUser.value);
-    let currentUserEmail = localStorage.getItem('loggedInEmail');        
+    let currentUserEmail =   typeof window !== 'undefined' ?  window?.localStorage.getItem('loggedInEmail') : '';        
     let ParsedcurrentUser : any;
 
             

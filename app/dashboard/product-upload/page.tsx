@@ -44,7 +44,10 @@ const ProductUpload = () => {
         e.preventDefault();
     
         const data = new FormData();
-        data.append('admin_email', localStorage.getItem('loggedInEmail') || '');
+
+        data.append('admin_email',  typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') || '' : '');
+
+        
         data.append('product_name', formData.product_name);
         data.append('description', formData.description);
         data.append('brand', formData.brand);

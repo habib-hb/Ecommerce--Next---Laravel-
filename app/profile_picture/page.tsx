@@ -32,7 +32,7 @@ const Profile_picture = () => {
 
     }
 
-    const user_email= localStorage.getItem('loggedInEmail');
+    const user_email=   typeof window !== 'undefined' ?  window?.localStorage.getItem('loggedInEmail')  : '';
 
     return ( 
         <Container>

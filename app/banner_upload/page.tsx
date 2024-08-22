@@ -3,6 +3,7 @@
 
 import axios from "axios";
 import Container from "../components/Container";
+import { useEffect } from "react";
 
 const Banner = () => {
 
@@ -32,7 +33,12 @@ const Banner = () => {
 
     }
 
-    const user_email= localStorage.getItem('loggedInEmail');
+    
+    let user_email:any = "";
+
+    useEffect(() => {
+        user_email = typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : '';
+    }, []);
 
     return ( 
         <Container>

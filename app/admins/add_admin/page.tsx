@@ -21,7 +21,7 @@ const Add_admin = () => {
     //Extracting the Admins data from laravel backend
     async function fetchPotentialAdmins() {
 
-        await axios.get('http://127.0.0.1:8000/api/add_admin_get_customers?email='+localStorage.getItem('loggedInEmail'))
+        await axios.get('http://127.0.0.1:8000/api/add_admin_get_customers?email='+(typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : ''))
          .then((response) => {
  
              console.log(response.data);
@@ -58,7 +58,7 @@ const Add_admin = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({targeted_customer_id : customer_id , admin_email : localStorage.getItem('loggedInEmail')})
+            body: JSON.stringify({targeted_customer_id : customer_id , admin_email : typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : ''})
         });
 
         if(response.ok){

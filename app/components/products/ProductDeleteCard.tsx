@@ -30,7 +30,7 @@ const ProductDeleteCard:React.FC<ProductCardProps> = ({data}) => {
                 //     method: 'GET', // Ensure this matches your Laravel route
                 //     credentials: 'include' // Ensures cookies are sent with the request
                 // });
-        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/product_delete/${data.id}?email=${localStorage.getItem('loggedInEmail')}`);        
+        const response = await fetch(`http://127.0.0.1:8000/api/dashboard/product_delete/${data.id}?email=${ typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : ''}`);        
 
         if(response.ok){
 

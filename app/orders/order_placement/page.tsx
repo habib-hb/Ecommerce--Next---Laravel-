@@ -8,9 +8,9 @@ const Order_placement = () => {
     const [order_placed , setOrder_placed] = useState(false);
 
     // Get Items from LocalStorage as a string
-    let ordered_products = localStorage.getItem('eShopCartItems') as string;
+    let ordered_products =   typeof window !== 'undefined' ? window?.localStorage.getItem('eShopCartItems') as string : '';
 
-    let orderer_email = localStorage.getItem('loggedInEmail');
+    let orderer_email =   typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : '';
 
 
 
@@ -100,7 +100,7 @@ const Order_placement = () => {
             
                         // alert('Updated Order Placed')
 
-                        localStorage.removeItem('eShopCartItems')
+                        typeof window !== 'undefined' &&  window?.localStorage.removeItem('eShopCartItems')
             
                         setOrder_placed(true)
 
@@ -136,7 +136,7 @@ const Order_placement = () => {
             
                         // alert('New Order Placed')
 
-                        localStorage.removeItem('eShopCartItems')
+                        typeof window !== 'undefined' && window?.localStorage.removeItem('eShopCartItems')
             
                         setOrder_placed(true)
 
@@ -171,7 +171,7 @@ const Order_placement = () => {
         
                     // alert('Very First Order Placed')
 
-                    localStorage.removeItem('eShopCartItems')
+                    typeof window !== 'undefined' &&  window?.localStorage.removeItem('eShopCartItems')
         
                     setOrder_placed(true)
 

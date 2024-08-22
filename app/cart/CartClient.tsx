@@ -81,7 +81,7 @@ const CartClient: React.FC<CartClientProps> = ({currentUser}) => {
                     <Button label={"Place Order"}
                         outline= { currentUser ? false : true }
                     onClick={()=>{
-                        localStorage.getItem('loggedInEmail') ? router.push('/orders/order_placement') : router.push('/login')
+                        typeof window !== 'undefined' && window?.localStorage.getItem('loggedInEmail') ? router.push('/orders/order_placement') : router.push('/login')
                     }} />
 
                     <Link href={"/"} className="text-slate-500 flex items-center gap-1 mt-2">

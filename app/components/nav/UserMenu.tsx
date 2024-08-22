@@ -25,7 +25,7 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
     // Retriving The user Data from backend database
     const [user , setUser] = useState<any>(null);
 
-    const userAcc = localStorage.getItem('loggedInEmail');
+    const userAcc = typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : '';
 
     async function userDataExtraction() {
         await axios.post('http://127.0.0.1:8000/api/user_data_retrive' , {
@@ -75,7 +75,7 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
 
     // Logout Functionality
     async function logoutProcess() {
-        await axios.post('http://127.0.0.1:8000/api/logout' , {email : localStorage.getItem('loggedInEmail')})
+        await axios.post('http://127.0.0.1:8000/api/logout' , {email :  typeof window !== 'undefined' ? window?.localStorage.getItem('loggedInEmail') : ''})
         .then((response) => {
             alert('It was successfull and the data is >>>' + response.data.message);
         })
@@ -84,8 +84,8 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser})=> {
             console.error(error);
         });
 
-        localStorage.removeItem('loggedInEmail');
-        localStorage.removeItem('eShopCartItems');
+        typeof window !== 'undefined' ? window?.localStorage.removeItem('loggedInEmail') : '';
+        typeof window !== 'undefined' ? window?.localStorage.removeItem('eShopCartItems') : '';
         window.location.href = '/';
     }
 

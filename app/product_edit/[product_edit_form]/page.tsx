@@ -241,7 +241,7 @@ const Product =  ({params}:{params:IPrams}) => {
         e.preventDefault();
     
         const data = new FormData();
-        data.append('user_email', localStorage.getItem('loggedInEmail') || '');
+        data.append('user_email',   typeof window !== 'undefined' ?  window?.localStorage.getItem('loggedInEmail') || '' : '');
         data.append('product_id', formData.product_id);
         data.append('product_name', formData.product_name);
         data.append('description', formData.description);

@@ -11,12 +11,27 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
 import { ReviewsProvider } from "./ReviewsContext";
 
-interface IPrams {
-    productId:string
-}
+// interface IPrams {
+//     productId:string
+// }
 
-const Product =  ({params}:{params:IPrams}) => {
-    console.log("params" , params)
+const Product =  () => { //{params}:{params:IPrams}
+    // console.log("params" , params)
+
+    let productId : any = ''
+
+    if(typeof window !== 'undefined'){
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        // Access a specific query parameter
+        const paramValue = urlParams.get('id');
+        console.log(paramValue); 
+
+        productId = paramValue
+
+    }
 
     const [products, setProducts] = useState<any>([]);
 
@@ -161,7 +176,7 @@ const Product =  ({params}:{params:IPrams}) => {
 
 
     
-    setProduct(theEntireAllProductArray.find((item: any)=> item.id == params.productId)); // Took 'theEntireAllProductArray' instead of 'products' state because the useState uses asycronous system which makes the value of products unavailable in the current run.  Not doing strict equality because the api response of the item.id is string
+    setProduct(theEntireAllProductArray.find((item: any)=> item.id == productId)); // Took 'theEntireAllProductArray' instead of 'products' state because the useState uses asycronous system which makes the value of products unavailable in the current run.  Not doing strict equality because the api response of the item.id is string
 
     setProductLoaded(true);
 

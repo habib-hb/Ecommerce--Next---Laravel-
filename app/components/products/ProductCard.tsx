@@ -22,7 +22,11 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
 
     return (
     <div 
-    onClick={()=> router.push(`/product/${data.id}`)}
+    onClick={() => {
+        if (typeof window !== 'undefined') {
+          window.location.href = `/product/productId?id=${data.id}`;
+        }
+      }}
     className="
      col-span-1
      cursor-pointer

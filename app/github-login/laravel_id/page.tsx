@@ -4,13 +4,15 @@ import { useEffect } from "react";
 
 
 // Operation : Extraction the email information from Laravel regarding Github Account
-const GithubLogin =({params}: any) => {
+const GithubLogin = () => {
 
+    const params = new URLSearchParams(window.location.search);
 
+    let laravel_id = params.get('laravel_id');
 
     const fetchGithubInfo = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/get_github_info', { laravel_id: params.laravel_id },
+            const response = await axios.post('http://127.0.0.1:8000/api/get_github_info', { laravel_id: laravel_id },
             { withCredentials: true });
 
             console.log('Success');
@@ -36,7 +38,7 @@ const GithubLogin =({params}: any) => {
 
         fetchGithubInfo();
         
-    }, [params.laravel_id]);
+    }, [laravel_id]);
     
 
     return ( 

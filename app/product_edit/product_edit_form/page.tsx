@@ -17,13 +17,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 // import { useState } from "react";
 
-interface IPrams {
-    product_edit_form:string
-}
+// interface IPrams {
+//     product_edit_form:string
+// }
 
 // const Product = async ({params}:{params:IPrams}) => {
-const Product =  ({params}:{params:IPrams}) => {
-    console.log("params" , params)
+const Product =  () => {
+    // console.log("params" , params)
+
+    //Using Search Params
+
+    const params = new URLSearchParams(window.location.search);
+    
+    let product_id = params.get('product_id');
 
     const [product, setProduct] = useState<any>({});
 
@@ -170,7 +176,7 @@ const Product =  ({params}:{params:IPrams}) => {
 
         console.log('Products Array from product edit section >>> ' , products);
 
-        const productData = products.find((item: any)=> item.id == params.product_edit_form) // Not doing strict equality because the api response of the item.id is string
+        const productData = products.find((item: any)=> item.id == product_id) // Not doing strict equality because the api response of the item.id is string
 
         // Checking
         console.log('Single Product details from product edit page >>> ' , productData)

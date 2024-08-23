@@ -22,7 +22,11 @@ const ProductEditCard:React.FC<ProductCardProps> = ({data}) => {
 
     return (
     <div 
-    onClick={()=> router.push(`/product_edit/${data.id}`)}
+    onClick={() => {
+        if (typeof window !== 'undefined') {
+          window.location.href = `/product_edit/product_edit_form?product_id=${data.id}`;
+        }
+      }}
     className="
      col-span-1
      cursor-pointer

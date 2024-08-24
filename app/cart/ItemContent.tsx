@@ -4,7 +4,7 @@ import { formatPrice } from "@/utils/formatPrice";
 import { CartProductType } from "../product/productId/ProductDetails";
 import Link from "next/link";
 import { truncateText } from "@/utils/truncateText";
-import Image from "next/image";
+// import Image from "next/image";
 import SetQuantity from "../components/products/SetQuantity";
 import { useCart } from "@/hooks/useCart";
 
@@ -37,7 +37,7 @@ const ItemContent:React.FC<ItemContentProps> = ({item}) => {
             <Link href={`/product/${item.id}`}>
             <div className="relative w-[70px] aspect-square">
 
-             <Image src={item.selectedImg.image} alt={item.name} fill className="object-contain" />
+             <img src={item.selectedImg.image} alt={item.name} className="object-contain" />
 
             </div>
             </Link>

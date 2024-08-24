@@ -4,7 +4,7 @@ import {
     CartProductType,
     SelectedImgType,
 } from '@/app/product/productId/ProductDetails';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 interface ProductImageProps {
     cartProduct: CartProductType;
@@ -41,8 +41,7 @@ const ProductImage:React.FC<ProductImageProps> = ({
         return (
             <div key={image.color} onClick={()=> handleColorSelect(image)} className={`relative w-[80%] aspect-square rounded border-teal-300 
             ${cartProduct.selectedImg.color === image.color ? 'border-[4px]' : 'border-none' }`} >
-                <Image src={image.image} alt={image.color}
-                fill
+                <img src={image.image} alt={image.color}
                 className="object-contain"
                 />
             </div>
@@ -50,7 +49,7 @@ const ProductImage:React.FC<ProductImageProps> = ({
      })}
         </div>
         <div className="col-span-5 relative aspect-square">
-         <Image fill 
+         <img 
          src={cartProduct.selectedImg.image}
          alt={cartProduct.name}
          className="

@@ -27,8 +27,8 @@ const Product =  () => {
 
     //Using Search Params
 
-    const params = new URLSearchParams(window.location.search);
-    
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+
     let product_id = params.get('product_id');
 
     const [product, setProduct] = useState<any>({});

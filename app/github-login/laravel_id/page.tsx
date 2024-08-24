@@ -6,7 +6,7 @@ import { useEffect } from "react";
 // Operation : Extraction the email information from Laravel regarding Github Account
 const GithubLogin = () => {
 
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
 
     let laravel_id = params.get('laravel_id');
 

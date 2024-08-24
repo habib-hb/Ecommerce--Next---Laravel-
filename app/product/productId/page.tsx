@@ -22,7 +22,7 @@ const Product =  () => { //{params}:{params:IPrams}
 
     if(typeof window !== 'undefined'){
 
-        const queryString = window.location.search;
+        const queryString = typeof window !== 'undefined' ? window.location.search : '';
         const urlParams = new URLSearchParams(queryString);
 
         // Access a specific query parameter

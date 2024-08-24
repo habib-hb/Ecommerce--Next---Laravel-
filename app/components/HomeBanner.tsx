@@ -2,7 +2,7 @@
 
 
 
-import Image from "next/image";
+// import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const HomeBanner = () => {

@@ -1,7 +1,7 @@
 'use client'
 
 
-import Image from "next/image";
+// import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa";
 
 interface AvatarProps {
@@ -10,12 +10,10 @@ interface AvatarProps {
 
 const Avatar:React.FC<AvatarProps>= ({src}) => {
     if(src){
-       return (<Image 
+       return (<img 
         src={src}
         alt="Avatar"
-        className="rounded-full h-6"
-        height="30"
-        width="30"
+        className="rounded-full h-[30px] w-[30px]"
         />)
     }
     return <FaUserCircle size={24}/>;

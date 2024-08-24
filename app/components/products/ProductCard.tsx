@@ -3,7 +3,7 @@
 import { formatPrice } from "@/utils/formatPrice";
 import { truncateText } from "@/utils/truncateText";
 import { Rating } from "@mui/material";
-import Image from "next/image";
+// import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
@@ -48,8 +48,7 @@ const ProductCard:React.FC<ProductCardProps> = ({data}) => {
         gap-1
         ">
             <div className="aspect-square w-full relative overflow-hidden">
-                <Image
-                fill
+                <img
                 src={data.images[0].image}
                 alt={data.name}
                 className="w-full h-full object-contain"
